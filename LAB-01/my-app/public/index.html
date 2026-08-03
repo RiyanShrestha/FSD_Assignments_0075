@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Responsive Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">MyApp</div>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h1>Welcome to My Responsive Website</h1>
+        <p>Simple, interactive, and mobile-friendly</p>
+        <button class="btn btn-primary" onclick="scrollToSection('features')">Explore</button>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <h2>Features</h2>
+    <div class="cards-container">
+        <div class="card">
+            <h3>📱 Responsive</h3>
+            <p>Works beautifully on all devices and screen sizes</p>
+        </div>
+        <div class="card">
+            <h3>⚡ Interactive</h3>
+            <p>Engaging user experience with smooth interactions</p>
+        </div>
+        <div class="card">
+            <h3>🎨 Modern Design</h3>
+            <p>Clean and contemporary visual design</p>
+        </div>
+    </div>
+</section>
+
+<!-- Toggle Section -->
+<section class="toggle-section">
+    <h2>Learn More</h2>
+    <div class="toggle-item">
+        <button class="toggle-btn" onclick="toggleContent(this)">+ Why Choose Us?</button>
+        <div class="toggle-content">
+            <p>Our platform combines simplicity with powerful features, making it perfect for beginners and professionals alike.</p>
+        </div>
+    </div>
+    <div class="toggle-item">
+        <button class="toggle-btn" onclick="toggleContent(this)">+ How It Works?</button>
+        <div class="toggle-content">
+            <p>Simply navigate through our platform, explore features, and start building amazing web experiences today!</p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+    <h2>Get In Touch</h2>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea placeholder="Your Message" rows="5" required></textarea>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+    <div id="formMessage" class="form-message"></div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2026 My Responsive Website. All rights reserved.</p>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
