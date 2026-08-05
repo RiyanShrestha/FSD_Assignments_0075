@@ -3,10 +3,6 @@ import '../styles/Profile.css';
 import avatarImg from '../assets/riyan_avatar.jpg';
 
 const Profile = () => {
-  const handleDownload = () => {
-    alert("Resume download placeholder clicked! In a production app, this would download a verified resume PDF.");
-  };
-
   return (
     <section id="profile" className="profile-section section-padding">
       <div className="profile-container">
@@ -30,9 +26,13 @@ const Profile = () => {
               >
                 LinkedIn Profile
               </a>
-              <button onClick={handleDownload} className="btn btn-secondary">
+              <a
+                href="/resume.pdf"
+                download="Riyan_Shrestha_Resume.pdf"
+                className="btn btn-secondary"
+              >
                 Download Resume
-              </button>
+              </a>
             </div>
           </div>
         </div>

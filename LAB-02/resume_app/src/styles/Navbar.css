@@ -48,6 +48,7 @@
   color: var(--text-secondary);
   position: relative;
   padding: 8px 0;
+  transition: color var(--transition-normal), font-weight var(--transition-normal);
 }
 
 .nav-item:hover {
@@ -62,12 +63,13 @@
   width: 0;
   height: 2px;
   background: var(--accent-gradient);
-  transition: var(--transition-normal);
+  transition: width var(--transition-normal) ease-out;
   border-radius: 2px;
 }
 
 .nav-item.active {
   color: var(--text-primary);
+  font-weight: 600;
 }
 
 .nav-item.active::after {

@@ -5,8 +5,9 @@ const Hero = () => {
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
       window.scrollTo({
-        top: el.offsetTop - 80,
+        top: top,
         behavior: 'smooth'
       });
     }

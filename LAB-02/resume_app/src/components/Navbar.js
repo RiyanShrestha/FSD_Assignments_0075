@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/Navbar.css';
 
 const navLinks = [
@@ -17,41 +17,70 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  
+  // Track manual clicking to prevent scrollspy overlap
+  const isClickScrolling = useRef(false);
+  const clickTimeout = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Background blur effect on scroll
       setScrolled(window.scrollY > 20);
-
-      // Active section detection
-      const scrollPosition = window.scrollY + 150;
-      
-      for (const link of navLinks) {
-        const el = document.getElementById(link.id);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(link.id);
-            break;
-          }
-        }
-      }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // ScrollSpy Intersection Observer
+    const observerOptions = {
+      root: null,
+      rootMargin: '-85px 0px -70% 0px', // Account for header and target upper viewport
+      threshold: 0
+    };
+
+    const observerCallback = (entries) => {
+      if (isClickScrolling.current) return;
+      
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    navLinks.forEach((link) => {
+      const el = document.getElementById(link.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+      if (clickTimeout.current) clearTimeout(clickTimeout.current);
+    };
   }, []);
 
   const handleNavClick = (e, id) => {
     e.preventDefault();
     setMobileMenuOpen(false);
+    
     const el = document.getElementById(id);
     if (el) {
+      // Set click scroll state to lock observer updates
+      isClickScrolling.current = true;
+      setActiveSection(id);
+      
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 80;
       window.scrollTo({
-        top: el.offsetTop - 80,
+        top: top,
         behavior: 'smooth'
       });
+
+      // Release lock after smooth scroll completes
+      if (clickTimeout.current) clearTimeout(clickTimeout.current);
+      clickTimeout.current = setTimeout(() => {
+        isClickScrolling.current = false;
+      }, 800); // Wait for smooth scroll animation to finish
     }
   };
 
