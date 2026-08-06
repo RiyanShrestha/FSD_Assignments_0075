@@ -1,0 +1,136 @@
+.netflix-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4%;
+  height: 68px;
+  background-color: #141414;
+  transition: background-color 0.4s ease;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.netflix-logo {
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+  color: #E50914;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: 1px;
+}
+
+.logo-svg {
+  width: 92px;
+  height: 25px;
+  display: block;
+}
+
+.header-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #b3b3b3;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.icon-btn:hover {
+  opacity: 0.8;
+}
+
+.icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.profile-menu {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+}
+
+.caret {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #ffffff;
+  margin-left: 5px;
+  transition: transform 0.15s ease;
+}
+
+/* Tablet view */
+@media (max-width: 950px) {
+  .header-nav {
+    gap: 12px;
+  }
+  .nav-link {
+    font-size: 13px;
+  }
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+  .netflix-header {
+    height: 56px;
+    padding: 0 16px;
+  }
+  .logo-svg {
+    width: 75px;
+    height: 20px;
+  }
+  /* On mobile, only show primary links or hide the nav bar and keep logo + controls */
+  .header-nav {
+    display: none; /* Hide nav links to look clean on mobile */
+  }
+  .header-right {
+    gap: 12px;
+  }
+}

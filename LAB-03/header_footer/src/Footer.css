@@ -1,0 +1,112 @@
+.netflix-footer {
+  background-color: #141414;
+  color: #808080;
+  padding: 50px 4% 30px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.footer-container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.social-links {
+  display: flex;
+  gap: 25px;
+  margin-bottom: 25px;
+}
+
+.social-icon {
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.social-icon:hover {
+  opacity: 0.8;
+}
+
+.footer-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.footer-links-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.footer-links-col {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-col li {
+  margin-bottom: 12px;
+}
+
+.footer-links-col a {
+  color: #808080;
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.footer-links-col a:hover {
+  text-decoration: underline;
+}
+
+.language-selector-container {
+  margin-bottom: 25px;
+}
+
+.language-selector-btn {
+  background: transparent;
+  border: 1px solid #333333;
+  color: #808080;
+  padding: 12px 20px;
+  font-size: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.language-selector-btn:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.lang-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.footer-country {
+  margin-top: 20px;
+  font-size: 11px;
+}
+
+/* Tablet Layout */
+@media (max-width: 768px) {
+  .footer-links-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .netflix-footer {
+    padding: 40px 20px 20px;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 480px) {
+  .footer-links-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
