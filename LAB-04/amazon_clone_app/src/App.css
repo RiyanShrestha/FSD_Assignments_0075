@@ -1,0 +1,28 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #eaeded;
+}
+
+.main-layout {
+  flex: 1;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.cart-content-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 900px) {
+  .cart-content-wrapper {
+    flex-direction: column;
+  }
+}
