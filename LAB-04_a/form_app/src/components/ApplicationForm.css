@@ -1,0 +1,350 @@
+/* ============================================
+   ApplicationForm — Right Panel Styles
+   ============================================ */
+
+.form-section {
+  width: 55%;
+  min-height: 100vh;
+  background: #0f0b1a;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2.5rem 3rem;
+  overflow-y: auto;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 540px;
+  padding: 1rem 0;
+}
+
+/* Header */
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.form-header__title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #f1f0f5;
+  letter-spacing: -0.8px;
+  margin-bottom: 0.4rem;
+}
+
+.form-header__subtitle {
+  font-size: 0.92rem;
+  color: #8b8697;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Form layout */
+.application-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+/* Row for side-by-side fields */
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row > .form-group {
+  flex: 1;
+}
+
+/* Individual form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #c4bfd4;
+  letter-spacing: 0.2px;
+}
+
+/* Input, Select, Textarea base styles */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1.5px solid #2a2440;
+  border-radius: 12px;
+  background: #1a1530;
+  color: #e8e6ef;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group select option:first-child,
+.form-group textarea::placeholder {
+  color: #5a5470;
+}
+
+/* Focus state */
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+  background: #1e1840;
+}
+
+/* Select styling */
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b8697' viewBox='0 0 16 16'%3E%3Cpath d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.form-group select option {
+  background: #1a1530;
+  color: #e8e6ef;
+}
+
+/* Textarea */
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+/* File input */
+.file-input-wrapper {
+  position: relative;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.8rem 1rem;
+  border: 1.5px dashed #2a2440;
+  border-radius: 12px;
+  background: #1a1530;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.file-input-label:hover {
+  border-color: #7c3aed;
+  background: #1e1840;
+}
+
+.file-input-label__icon {
+  font-size: 1.3rem;
+}
+
+.file-input-label__text {
+  font-size: 0.85rem;
+  color: #8b8697;
+}
+
+.file-input-label__text--active {
+  color: #a78bfa;
+  font-weight: 500;
+}
+
+.file-input-label input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.file-hint {
+  font-size: 0.72rem;
+  color: #5a5470;
+  margin-top: 2px;
+}
+
+/* Radio buttons */
+.radio-group {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.radio-option {
+  position: relative;
+}
+
+.radio-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio-option label {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border: 1.5px solid #2a2440;
+  border-radius: 50px;
+  background: #1a1530;
+  color: #8b8697;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.radio-option label:hover {
+  border-color: #7c3aed;
+  color: #c4bfd4;
+}
+
+.radio-option input[type="radio"]:checked + label {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-color: #7c3aed;
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Checkbox */
+.checkbox-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: #7c3aed;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checkbox-group label {
+  font-size: 0.82rem;
+  color: #8b8697;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.checkbox-group label strong {
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+/* Buttons */
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  padding: 0.85rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.2px;
+}
+
+/* Primary button — Apply Now */
+.btn--primary {
+  flex: 1;
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  color: #ffffff;
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3);
+}
+
+.btn--primary:hover {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 6px 28px rgba(124, 58, 237, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.3);
+}
+
+/* Secondary button — Clear Form */
+.btn--secondary {
+  background: transparent;
+  color: #8b8697;
+  border: 1.5px solid #2a2440;
+}
+
+.btn--secondary:hover {
+  border-color: #7c3aed;
+  color: #a78bfa;
+  background: rgba(124, 58, 237, 0.06);
+}
+
+.btn--secondary:active {
+  background: rgba(124, 58, 237, 0.1);
+}
+
+/* Divider */
+.form-divider {
+  height: 1px;
+  background: #2a2440;
+  border: none;
+  margin: 0.25rem 0;
+}
+
+/* ============================================
+   Responsive — Mobile
+   ============================================ */
+@media (max-width: 1024px) {
+  .form-section {
+    width: 100%;
+    min-height: auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 1.35rem;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-section {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .form-header__title {
+    font-size: 1.5rem;
+  }
+
+  .radio-group {
+    gap: 0.5rem;
+  }
+}

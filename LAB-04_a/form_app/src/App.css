@@ -1,0 +1,15 @@
+/* Main layout container for split-screen design */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background: #0f0b1a;
+}
+
+/* Responsive layout: stack vertically on mobile/tablet */
+@media (max-width: 1024px) {
+  .app-layout {
+    flex-direction: column;
+  }
+}
+
