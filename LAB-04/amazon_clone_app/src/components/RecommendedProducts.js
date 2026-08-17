@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './RecommendedProducts.css';
 
 const RECOMMENDATIONS = [
@@ -54,23 +55,25 @@ function RecommendedProducts({ onAddToCart }) {
       <div className="recommendations-grid">
         {RECOMMENDATIONS.map((product) => (
           <div key={product.id} className="recommendation-card">
-            <div className="rec-image-container">
-              <img src={product.image} alt={product.name} className="rec-image" />
-            </div>
-            <div className="rec-details">
-              <h4 className="rec-name">{product.name}</h4>
-              <div className="rec-rating">
-                <span className="stars-label">{renderStars(product.rating)}</span>
-                <span className="rating-val">{product.rating}</span>
+            <Link to={`/product/${product.id}`} className="rec-link">
+              <div className="rec-image-container">
+                <img src={product.image} alt={product.name} className="rec-image" />
               </div>
-              <div className="rec-price">${product.price.toFixed(2)}</div>
-              <button 
-                className="add-to-cart-btn" 
-                onClick={() => onAddToCart(product)}
-              >
-                Add to Cart
-              </button>
-            </div>
+              <div className="rec-details">
+                <h4 className="rec-name">{product.name}</h4>
+                <div className="rec-rating">
+                  <span className="stars-label">{renderStars(product.rating)}</span>
+                  <span className="rating-val">{product.rating}</span>
+                </div>
+                <div className="rec-price">${product.price.toFixed(2)}</div>
+              </div>
+            </Link>
+            <button 
+              className="add-to-cart-btn" 
+              onClick={() => onAddToCart(product)}
+            >
+              Add to Cart
+            </button>
           </div>
         ))}
       </div>
@@ -80,3 +83,4 @@ function RecommendedProducts({ onAddToCart }) {
 
 export default RecommendedProducts;
 export { RECOMMENDATIONS };
+

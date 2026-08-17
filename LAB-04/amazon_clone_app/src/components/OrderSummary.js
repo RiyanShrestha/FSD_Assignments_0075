@@ -1,12 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './OrderSummary.css';
 
 function OrderSummary({ cartItems }) {
+  const navigate = useNavigate();
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleCheckout = () => {
-    alert("Proceeding to checkout! (Mock Action)");
+    navigate('/checkout');
   };
 
   return (
@@ -41,3 +43,4 @@ function OrderSummary({ cartItems }) {
 }
 
 export default OrderSummary;
+

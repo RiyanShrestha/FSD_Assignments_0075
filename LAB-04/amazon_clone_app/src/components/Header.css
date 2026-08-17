@@ -213,3 +213,13 @@
     display: none;
   }
 }
+
+/* Route Link Styling Reset */
+.header-logo-link,
+.nav-option-link,
+.nav-cart-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+}
+

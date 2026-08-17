@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import NavigationBar from './components/NavigationBar';
 import Cart from './components/Cart';
 import OrderSummary from './components/OrderSummary';
 import RecommendedProducts from './components/RecommendedProducts';
 import Footer from './components/Footer';
+import ProductList from './components/ProductList';
+import ProductDetails from './components/ProductDetails';
+import Checkout from './components/Checkout';
+import Orders from './components/Orders';
 import './App.css';
 
 const INITIAL_CART_ITEMS = [
@@ -19,7 +24,7 @@ const INITIAL_CART_ITEMS = [
   },
   {
     id: 2,
-    name: "Smart Watch",
+    name: "Smart Watch with Heart Rate Monitor",
     rating: 4.7,
     inStock: true,
     price: 59.99,
@@ -37,8 +42,14 @@ const INITIAL_CART_ITEMS = [
   }
 ];
 
-function App() {
+function AppContent() {
   const [cartItems, setCartItems] = useState(INITIAL_CART_ITEMS);
+  const [ordersList, setOrdersList] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
+  const location = useLocation();
+  const isCheckoutPage = location.pathname === '/checkout';
 
   // Update item quantity
   const handleUpdateQty = (id, newQty) => {
@@ -55,7 +66,7 @@ function App() {
     setCartItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
-  // Add item from recommended list
+  // Add item from recommended list or product details
   const handleAddToCart = (product) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
@@ -80,39 +91,88 @@ function App() {
     });
   };
 
+  // Place order
+  const handlePlaceOrder = (orderData) => {
+    setOrdersList(prevOrders => [orderData, ...prevOrders]);
+    setCartItems([]); // Clear cart upon placing order
+  };
+
   // Calculate total number of items
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <div className="app-container">
-      {/* Header section */}
-      <Header cartCount={cartCount} />
-
-      {/* Sub Navigation Bar */}
-      <NavigationBar />
-
-      {/* Main content grid */}
-      <main className="main-layout">
-        <div className="cart-content-wrapper">
-          {/* Left section: Shopping Cart */}
-          <Cart 
-            cartItems={cartItems} 
-            onUpdateQty={handleUpdateQty} 
-            onDelete={handleDelete} 
+      {/* Header and Sub Nav are hidden on Checkout page */}
+      {!isCheckoutPage && (
+        <>
+          <Header 
+            cartCount={cartCount} 
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
+          <NavigationBar />
+        </>
+      )}
 
-          {/* Right section: Order Summary */}
-          <OrderSummary cartItems={cartItems} />
-        </div>
+      {/* Route Content Switcher */}
+      <Routes>
+        <Route path="/" element={
+          <main className="main-layout">
+            <ProductList 
+              onAddToCart={handleAddToCart} 
+              searchQuery={searchQuery}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          </main>
+        } />
 
-        {/* Recommendations block */}
-        <RecommendedProducts onAddToCart={handleAddToCart} />
-      </main>
+        <Route path="/product/:id" element={
+          <main className="main-layout">
+            <ProductDetails onAddToCart={handleAddToCart} />
+          </main>
+        } />
 
-      {/* Footer section */}
-      <Footer />
+        <Route path="/cart" element={
+          <main className="main-layout">
+            <div className="cart-content-wrapper">
+              <Cart 
+                cartItems={cartItems} 
+                onUpdateQty={handleUpdateQty} 
+                onDelete={handleDelete} 
+              />
+              <OrderSummary cartItems={cartItems} />
+            </div>
+            <RecommendedProducts onAddToCart={handleAddToCart} />
+          </main>
+        } />
+
+        <Route path="/checkout" element={
+          <Checkout cartItems={cartItems} onPlaceOrder={handlePlaceOrder} />
+        } />
+
+        <Route path="/orders" element={
+          <main className="main-layout">
+            <Orders ordersList={ordersList} />
+          </main>
+        } />
+      </Routes>
+
+      {/* Footer is hidden on Checkout page */}
+      {!isCheckoutPage && <Footer />}
     </div>
   );
 }
 
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
+  );
+}
+
 export default App;
+

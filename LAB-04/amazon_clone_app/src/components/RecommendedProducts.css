@@ -116,3 +116,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+.rec-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
