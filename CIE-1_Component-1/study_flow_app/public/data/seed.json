@@ -1,0 +1,298 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "name": "Web Development",
+      "code": "CS301",
+      "instructor": "Dr. Sarah Chen",
+      "semester": "Fall 2026",
+      "credits": 4,
+      "color": "#4A90D9",
+      "status": "active",
+      "progress": 65,
+      "description": "Full-stack web development covering HTML, CSS, JavaScript, React, and Node.js",
+      "createdAt": "2026-08-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "UX Evaluation",
+      "code": "DES205",
+      "instructor": "Prof. Michael Torres",
+      "semester": "Fall 2026",
+      "credits": 3,
+      "color": "#E87C3E",
+      "status": "active",
+      "progress": 45,
+      "description": "User experience research methods, usability testing, and interaction design evaluation",
+      "createdAt": "2026-08-01T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "name": "Database Systems",
+      "code": "CS305",
+      "instructor": "Dr. Emily Watson",
+      "semester": "Fall 2026",
+      "credits": 4,
+      "color": "#50C878",
+      "status": "active",
+      "progress": 70,
+      "description": "Relational databases, SQL, normalization, indexing, and database design",
+      "createdAt": "2026-08-02T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "name": "Data Structures",
+      "code": "CS202",
+      "instructor": "Dr. James Liu",
+      "semester": "Fall 2026",
+      "credits": 4,
+      "color": "#9B59B6",
+      "status": "active",
+      "progress": 80,
+      "description": "Arrays, linked lists, trees, graphs, sorting algorithms, and complexity analysis",
+      "createdAt": "2026-08-02T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "name": "Operating Systems",
+      "code": "CS310",
+      "instructor": "Prof. Robert Kim",
+      "semester": "Fall 2026",
+      "credits": 3,
+      "color": "#E74C3C",
+      "status": "active",
+      "progress": 35,
+      "description": "Process management, memory allocation, file systems, and OS security concepts",
+      "createdAt": "2026-08-03T10:00:00Z"
+    }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Complete React Router lab",
+      "description": "Implement client-side routing with React Router v6 for the portfolio project",
+      "courseId": 1,
+      "priority": "high",
+      "status": "in-progress",
+      "dueDate": "2026-08-22T23:59:00Z",
+      "completed": false,
+      "createdAt": "2026-08-10T09:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Study for SQL midterm",
+      "description": "Review chapters 4-8, practice complex queries and normalization",
+      "courseId": 3,
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2026-08-25T09:00:00Z",
+      "completed": false,
+      "createdAt": "2026-08-11T14:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Binary tree implementation",
+      "description": "Implement BST with insert, delete, search, and traversal methods in Java",
+      "courseId": 4,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-08-15T23:59:00Z",
+      "completed": true,
+      "completedAt": "2026-08-14T16:30:00Z",
+      "createdAt": "2026-08-05T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "title": "Heuristic evaluation report",
+      "description": "Conduct heuristic evaluation of assigned mobile app using Nielsen's heuristics",
+      "courseId": 2,
+      "priority": "high",
+      "status": "in-progress",
+      "dueDate": "2026-08-23T23:59:00Z",
+      "completed": false,
+      "createdAt": "2026-08-12T11:00:00Z"
+    },
+    {
+      "id": 5,
+      "title": "Read OS chapter on processes",
+      "description": "Read chapter 3: Process concept, scheduling, operations, and IPC",
+      "courseId": 5,
+      "priority": "low",
+      "status": "pending",
+      "dueDate": "2026-08-26T23:59:00Z",
+      "completed": false,
+      "createdAt": "2026-08-13T08:00:00Z"
+    },
+    {
+      "id": 6,
+      "title": "CSS Grid layout exercise",
+      "description": "Build responsive dashboard layout using CSS Grid and Flexbox",
+      "courseId": 1,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-08-12T23:59:00Z",
+      "completed": true,
+      "completedAt": "2026-08-11T20:00:00Z",
+      "createdAt": "2026-08-06T09:00:00Z"
+    },
+    {
+      "id": 7,
+      "title": "ER diagram for library system",
+      "description": "Design entity-relationship diagram with all entities, attributes, and relationships",
+      "courseId": 3,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-08-14T23:59:00Z",
+      "completed": true,
+      "completedAt": "2026-08-13T18:00:00Z",
+      "createdAt": "2026-08-07T10:00:00Z"
+    },
+    {
+      "id": 8,
+      "title": "User testing session prep",
+      "description": "Prepare test scenarios, consent forms, and recording setup for usability testing",
+      "courseId": 2,
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2026-08-28T23:59:00Z",
+      "completed": false,
+      "createdAt": "2026-08-14T10:00:00Z"
+    }
+  ],
+  "assignments": [
+    {
+      "id": 1,
+      "title": "Portfolio Website Project",
+      "description": "Build a responsive portfolio website using HTML, CSS, and JavaScript with React",
+      "courseId": 1,
+      "priority": "high",
+      "status": "in-progress",
+      "dueDate": "2026-08-30T23:59:00Z",
+      "grade": null,
+      "maxGrade": 100,
+      "completed": false,
+      "createdAt": "2026-08-01T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Usability Test Report",
+      "description": "Conduct and document a complete usability evaluation with 5 participants",
+      "courseId": 2,
+      "priority": "high",
+      "status": "pending",
+      "dueDate": "2026-09-05T23:59:00Z",
+      "grade": null,
+      "maxGrade": 100,
+      "completed": false,
+      "createdAt": "2026-08-03T10:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "Database Design Project",
+      "description": "Design and implement a normalized relational database for a university system",
+      "courseId": 3,
+      "priority": "high",
+      "status": "in-progress",
+      "dueDate": "2026-09-01T23:59:00Z",
+      "grade": null,
+      "maxGrade": 100,
+      "completed": false,
+      "createdAt": "2026-08-02T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "title": "Algorithm Analysis Paper",
+      "description": "Compare time and space complexity of sorting algorithms with benchmarks",
+      "courseId": 4,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-08-15T23:59:00Z",
+      "grade": 92,
+      "maxGrade": 100,
+      "completed": true,
+      "completedAt": "2026-08-14T21:00:00Z",
+      "createdAt": "2026-08-01T10:00:00Z"
+    },
+    {
+      "id": 5,
+      "title": "OS Process Scheduler Simulation",
+      "description": "Implement Round Robin and Priority scheduling algorithms in C",
+      "courseId": 5,
+      "priority": "medium",
+      "status": "pending",
+      "dueDate": "2026-09-10T23:59:00Z",
+      "grade": null,
+      "maxGrade": 100,
+      "completed": false,
+      "createdAt": "2026-08-05T10:00:00Z"
+    },
+    {
+      "id": 6,
+      "title": "JavaScript Quiz App",
+      "description": "Build an interactive quiz application with DOM manipulation and event handling",
+      "courseId": 1,
+      "priority": "medium",
+      "status": "completed",
+      "dueDate": "2026-08-10T23:59:00Z",
+      "grade": 88,
+      "maxGrade": 100,
+      "completed": true,
+      "completedAt": "2026-08-09T22:00:00Z",
+      "createdAt": "2026-08-01T10:00:00Z"
+    }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "title": "React Hooks Summary",
+      "content": "useState: State management in functional components\nuseEffect: Side effects, runs after render\nuseContext: Access context without Consumer wrapper\nuseCallback: Memoize functions\nuseMemo: Memoize values\nuseRef: Persist values across renders without triggering re-render\n\nRules of Hooks:\n1. Only call hooks at top level\n2. Only call hooks from React functions",
+      "courseId": 1,
+      "tags": ["react", "hooks", "javascript"],
+      "createdAt": "2026-08-10T14:30:00Z",
+      "updatedAt": "2026-08-10T14:30:00Z"
+    },
+    {
+      "id": 2,
+      "title": "Nielsen's 10 Usability Heuristics",
+      "content": "1. Visibility of system status\n2. Match between system and real world\n3. User control and freedom\n4. Consistency and standards\n5. Error prevention\n6. Recognition rather than recall\n7. Flexibility and efficiency of use\n8. Aesthetic and minimalist design\n9. Help users recognize, diagnose, and recover from errors\n10. Help and documentation",
+      "courseId": 2,
+      "tags": ["ux", "heuristics", "usability"],
+      "createdAt": "2026-08-11T16:00:00Z",
+      "updatedAt": "2026-08-11T16:00:00Z"
+    },
+    {
+      "id": 3,
+      "title": "SQL JOIN Types",
+      "content": "INNER JOIN: Returns matching rows from both tables\nLEFT JOIN: All rows from left + matching from right\nRIGHT JOIN: All rows from right + matching from left\nFULL OUTER JOIN: All rows from both tables\nCROSS JOIN: Cartesian product\nSELF JOIN: Table joined with itself\n\nExample:\nSELECT s.name, c.title FROM students s INNER JOIN courses c ON s.course_id = c.id",
+      "courseId": 3,
+      "tags": ["sql", "joins", "database"],
+      "createdAt": "2026-08-12T10:00:00Z",
+      "updatedAt": "2026-08-12T10:00:00Z"
+    },
+    {
+      "id": 4,
+      "title": "Big O Notation Cheat Sheet",
+      "content": "O(1) - Constant: Array access, hash table lookup\nO(log n) - Logarithmic: Binary search\nO(n) - Linear: Linear search, single loop\nO(n log n) - Linearithmic: Merge sort, quicksort average\nO(n²) - Quadratic: Bubble sort, nested loops\nO(2^n) - Exponential: Recursive fibonacci\nO(n!) - Factorial: Permutations\n\nSpace complexity matters too!",
+      "courseId": 4,
+      "tags": ["algorithms", "complexity", "big-o"],
+      "createdAt": "2026-08-13T09:00:00Z",
+      "updatedAt": "2026-08-13T09:00:00Z"
+    },
+    {
+      "id": 5,
+      "title": "Process States in OS",
+      "content": "New → Ready → Running → Waiting → Ready → Running → Terminated\n\nProcess Control Block (PCB):\n- Process ID\n- Process state\n- Program counter\n- CPU registers\n- Memory limits\n- List of open files\n\nContext switch: Save state of old process, load state of new process",
+      "courseId": 5,
+      "tags": ["os", "processes", "scheduling"],
+      "createdAt": "2026-08-14T11:00:00Z",
+      "updatedAt": "2026-08-14T11:00:00Z"
+    }
+  ],
+  "preferences": {
+    "theme": "light",
+    "notifications": true,
+    "emailNotifications": false,
+    "taskReminders": true,
+    "language": "en"
+  }
+}

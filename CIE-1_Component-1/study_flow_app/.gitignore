@@ -1,0 +1,31 @@
+# StudyFlow
+
+## Dependencies
+node_modules/
+
+## Environment files
+.env
+.env.local
+server/.env
+
+## Build
+build/
+dist/
+
+## IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+## OS
+.DS_Store
+Thumbs.db
+
+## Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Coverage
+coverage/
