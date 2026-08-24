@@ -1,0 +1,270 @@
+/* ============================================================
+   App.css — Simple, modern styling for the application
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.app-header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Section Cards */
+.section-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-card h2 {
+  font-size: 22px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.section-card .subtitle {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 18px;
+}
+
+/* Input Row */
+.input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+.input-row input {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 140px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-row input:focus {
+  border-color: #667eea;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.btn {
+  padding: 9px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  color: white;
+  font-weight: 500;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-blue { background: #667eea; }
+.btn-green { background: #28a745; }
+.btn-red { background: #dc3545; }
+.btn-orange { background: #e67e22; }
+.btn-teal { background: #17a2b8; }
+.btn-purple { background: #764ba2; }
+
+/* Result Box */
+.result-box {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 15px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+.result-box.error {
+  border-color: #f5c6cb;
+  background: #fff5f5;
+  color: #dc3545;
+}
+
+.result-label {
+  font-weight: 600;
+  margin-right: 8px;
+  color: #555;
+}
+
+/* Visual Stack and Queue */
+.visual-container {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+  min-height: 48px;
+  align-items: flex-end;
+}
+
+.visual-item {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  position: relative;
+  transition: all 0.2s;
+}
+
+/* Stack items — vertical display, bottom to top */
+.stack-visual {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+  min-height: 48px;
+  margin: 14px 0;
+}
+
+.stack-item {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  background: #667eea;
+  text-align: center;
+  max-width: 200px;
+  position: relative;
+}
+
+.stack-item.top {
+  background: #e67e22;
+}
+
+.stack-item .item-label {
+  position: absolute;
+  right: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+}
+
+/* Queue items — horizontal display, left to right */
+.queue-visual {
+  display: flex;
+  gap: 4px;
+  min-height: 48px;
+  margin: 14px 0;
+  align-items: center;
+}
+
+.queue-item {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: white;
+  background: #28a745;
+  text-align: center;
+  position: relative;
+}
+
+.queue-item.front-item {
+  background: #e67e22;
+}
+
+.queue-item .item-label {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #888;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.arrow {
+  font-size: 20px;
+  color: #aaa;
+  margin: 0 2px;
+}
+
+/* Empty state */
+.empty-msg {
+  color: #aaa;
+  font-style: italic;
+  font-size: 14px;
+  padding: 10px 0;
+}
+
+/* Info tag */
+.info-tag {
+  display: inline-block;
+  background: #eef1ff;
+  color: #667eea;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .input-row input {
+    width: 100%;
+  }
+  .app {
+    padding: 10px;
+  }
+}
