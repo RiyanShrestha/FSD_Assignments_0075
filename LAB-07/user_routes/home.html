@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Node.js Lab</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background: #f9f9f9; color: #333; }
+    nav { margin-bottom: 30px; }
+    nav a { margin-right: 12px; text-decoration: none; color: #0066cc; }
+    nav a:hover { text-decoration: underline; }
+    h1 { color: #2c3e50; margin-bottom: 5px; }
+    .subtitle { color: #666; margin-bottom: 30px; font-size: 16px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 20px; text-align: center; text-decoration: none; color: #333; transition: box-shadow 0.2s; }
+    .card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+    .card h3 { margin: 0 0 8px 0; color: #0066cc; }
+    .card p { margin: 0; font-size: 14px; color: #666; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/register">Register</a>
+    <a href="/users">All Users</a>
+    <a href="/users/odd">Odd Users</a>
+    <a href="/users/even">Even Users</a>
+  </nav>
+
+  <h1>Node.js Lab &ndash; User Routes</h1>
+  <p class="subtitle">A beginner-friendly Node.js + Express.js project demonstrating routing, user data filtering, file serving, and form handling.</p>
+
+  <div class="cards">
+    <a class="card" href="/">
+      <h3>&#127968; Home</h3>
+      <p>You are here</p>
+    </a>
+    <a class="card" href="/about">
+      <h3>&#8505;&#65039; About</h3>
+      <p>Learn about Node.js &amp; Express</p>
+    </a>
+    <a class="card" href="/register">
+      <h3>&#9997;&#65039; Register</h3>
+      <p>Submit a registration form</p>
+    </a>
+    <a class="card" href="/users">
+      <h3>&#128101; All Users</h3>
+      <p>View all 6 users (JSON)</p>
+    </a>
+    <a class="card" href="/users/odd">
+      <h3>&#128310; Odd Users</h3>
+      <p>Users with IDs 1, 3, 5</p>
+    </a>
+    <a class="card" href="/users/even">
+      <h3>&#128311; Even Users</h3>
+      <p>Users with IDs 2, 4, 6</p>
+    </a>
+    <a class="card" href="/download-logo">
+      <h3>&#11015;&#65039; Download Logo</h3>
+      <p>Download the project logo</p>
+    </a>
+  </div>
+</body>
+</html>
