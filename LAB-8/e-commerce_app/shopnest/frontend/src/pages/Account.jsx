@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
@@ -8,6 +8,10 @@ const Account = () => {
   const { addToast } = useToast();
   const navigate = useNavigate();
   
+  useEffect(() => {
+    document.title = 'ShopNest | Account';
+  }, []);
+
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);

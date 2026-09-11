@@ -1762,3 +1762,371 @@ button, input, select {
     flex-direction: column;
   }
 }
+
+/* ==========================================================================
+   Delivery Details & Checkout Form
+   ========================================================================== */
+.delivery-card {
+  border-top: 3px solid var(--primary);
+}
+
+.delivery-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--secondary);
+}
+
+.delivery-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.radio-option:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.radio-option input[type="radio"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+}
+
+/* ==========================================================================
+   Promo Code Box in Order Summary
+   ========================================================================== */
+.promo-box {
+  background: #f8fafc;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+}
+
+.promo-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.promo-form {
+  display: flex;
+  gap: 8px;
+}
+
+.promo-input {
+  flex: 1;
+  padding: 7px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  outline: none;
+}
+.promo-input:focus {
+  border-color: var(--primary);
+}
+
+.promo-applied-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--success-light);
+  color: #065f46;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-remove-promo {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-remove-promo:hover {
+  text-decoration: underline;
+}
+
+.promo-error {
+  color: var(--error);
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.promo-success {
+  color: var(--success);
+  font-size: 0.75rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Active Filter Badges (Products Page)
+   ========================================================================== */
+.active-filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.active-filters-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: var(--primary-dark);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+.filter-badge-remove {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 1.1rem;
+  line-height: 1;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.filter-badge-remove:hover {
+  color: var(--error);
+}
+
+.btn-reset-filters {
+  background: none;
+  border: none;
+  color: var(--error);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: auto;
+}
+.btn-reset-filters:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Order Confirmation Page & Invoice
+   ========================================================================== */
+.confirmation-card {
+  max-width: 650px;
+  padding: 36px;
+  border-radius: var(--radius-lg);
+}
+
+.confirmation-check-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--success-light);
+  color: #065f46;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 auto 12px;
+}
+
+.confirmation-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--secondary);
+}
+
+.confirmation-subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.confirmation-order-id {
+  display: inline-block;
+  background: #eff6ff;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 4px 14px;
+  border-radius: var(--radius-full);
+  margin-top: 10px;
+}
+
+.invoice-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.invoice-meta-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.invoice-val {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.invoice-items-section h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.invoice-items-table {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  background: #ffffff;
+}
+
+.invoice-item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 0.9rem;
+  border-bottom: 1px dashed var(--border);
+}
+.invoice-item-row:last-child {
+  border-bottom: none;
+}
+
+.invoice-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.invoice-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.invoice-total-row.grand-total {
+  font-size: 1.25rem;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   Orders Page Additional Meta Badges
+   ========================================================================== */
+.order-details-meta-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.meta-tag {
+  background: #f1f5f9;
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 500;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+}
+
+.order-subtotal-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.85rem;
+}
+
+.order-discount-note {
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Print Stylesheet (@media print)
+   ========================================================================== */
+@media print {
+  .navbar, .footer, .no-print, .hamburger-btn, .toast-container, .btn-hero, .btn-hero-secondary {
+    display: none !important;
+  }
+  body, .app-shell, .main-content {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .confirmation-card {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .confirmation-title {
+    color: #000000 !important;
+  }
+}
+

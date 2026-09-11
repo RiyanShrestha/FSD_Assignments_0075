@@ -23,7 +23,11 @@ const ProductDetails = () => {
     setError('');
     getProductById(id)
       .then(data => {
-        setProduct(data.product || data);
+        const prod = data.product || data;
+        setProduct(prod);
+        if (prod && prod.name) {
+          document.title = `ShopNest | ${prod.name}`;
+        }
         setLoading(false);
       })
       .catch(err => {

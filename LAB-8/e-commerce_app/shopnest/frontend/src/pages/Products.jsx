@@ -14,6 +14,11 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  // Dynamic document title
+  useEffect(() => {
+    document.title = 'ShopNest | Products';
+  }, []);
+
   // Filter & Search states
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
@@ -63,6 +68,8 @@ const Products = () => {
     searchParams.delete('category');
     setSearchParams(searchParams);
   };
+
+  const hasActiveFilters = selectedCategory !== 'All Categories' || searchTerm.trim() !== '';
 
   // Derive filtered and sorted products without mutating the original products array
   const filteredProducts = useMemo(() => {
@@ -176,6 +183,42 @@ const Products = () => {
             </select>
           </div>
         </div>
+
+        {/* Enhancement 7: Active Filter Badges */}
+        {hasActiveFilters && (
+          <div className="active-filters-bar mt-1">
+            <span className="active-filters-label">Active Filters:</span>
+            {selectedCategory !== 'All Categories' && (
+              <span className="filter-badge">
+                Category: {selectedCategory}
+                <button 
+                  type="button" 
+                  className="filter-badge-remove"
+                  onClick={() => handleCategorySelect('All Categories')} 
+                  aria-label="Remove category filter"
+                >
+                  ×
+                </button>
+              </span>
+            )}
+            {searchTerm.trim() !== '' && (
+              <span className="filter-badge">
+                "{searchTerm.trim()}"
+                <button 
+                  type="button" 
+                  className="filter-badge-remove"
+                  onClick={() => setSearchTerm('')} 
+                  aria-label="Remove search filter"
+                >
+                  ×
+                </button>
+              </span>
+            )}
+            <button type="button" className="btn-reset-filters" onClick={handleClearFilters}>
+              Reset All
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Content Area */}

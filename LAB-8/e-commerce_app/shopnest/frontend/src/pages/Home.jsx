@@ -27,6 +27,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    document.title = 'ShopNest | Home';
     fetchFeaturedProducts();
   }, []);
 

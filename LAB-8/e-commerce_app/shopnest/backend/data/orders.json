@@ -1,0 +1,33 @@
+[
+  {
+    "id": "SN-159619",
+    "customer": {
+      "name": "Riyan",
+      "email": "riyan@example.com"
+    },
+    "shippingAddress": {
+      "address": "123 Anna Salai",
+      "city": "Chennai",
+      "phone": "9876543210"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "items": [
+      {
+        "productId": 1,
+        "name": "Wireless Headphones",
+        "category": "Audio",
+        "price": 2499,
+        "quantity": 2,
+        "subtotal": 4998,
+        "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80"
+      }
+    ],
+    "subtotal": 4998,
+    "discount": 500,
+    "promoCode": "NEST10",
+    "shipping": 0,
+    "total": 4498,
+    "date": "2026-09-11T13:09:19.619Z",
+    "status": "Confirmed"
+  }
+]

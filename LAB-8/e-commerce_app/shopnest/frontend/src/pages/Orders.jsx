@@ -10,6 +10,10 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    document.title = 'ShopNest | Orders';
+  }, []);
+
   const fetchOrders = () => {
     setLoading(true);
     setError('');
@@ -78,13 +82,25 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {order.customer && (
-                  <div className="order-customer-info">
-                    <span>Customer: <strong>{order.customer.name}</strong> ({order.customer.email})</span>
-                  </div>
-                )}
+                <div className="order-details-meta-row">
+                  {order.customer && (
+                    <span className="meta-tag">
+                      👤 {order.customer.name}
+                    </span>
+                  )}
+                  {order.shippingAddress?.city && (
+                    <span className="meta-tag">
+                      📍 {order.shippingAddress.city}
+                    </span>
+                  )}
+                  {order.paymentMethod && (
+                    <span className="meta-tag">
+                      💳 {order.paymentMethod}
+                    </span>
+                  )}
+                </div>
 
-                <div className="order-items-table">
+                <div className="order-items-table mt-1">
                   {order.items && order.items.map((item, idx) => (
                     <div key={idx} className="order-item-row">
                       <div className="order-item-title-col">
@@ -102,11 +118,18 @@ const Orders = () => {
                 </div>
 
                 <div className="order-card-footer">
-                  {order.shipping !== undefined && order.shipping > 0 && (
-                    <div className="order-fee-note">
-                      <span>Shipping: ₹{order.shipping}</span>
-                    </div>
-                  )}
+                  <div className="order-subtotal-notes">
+                    {order.discount > 0 && (
+                      <span className="order-discount-note text-success">
+                        Discount: -₹{order.discount.toLocaleString('en-IN')} ({order.promoCode || 'Promo'})
+                      </span>
+                    )}
+                    {order.shipping !== undefined && order.shipping > 0 && (
+                      <span className="order-fee-note">
+                        Shipping: ₹{order.shipping}
+                      </span>
+                    )}
+                  </div>
                   <div className="order-total-amount">
                     <span>Total: </span>
                     <strong className="total-highlight">₹{order.total.toLocaleString('en-IN')}</strong>

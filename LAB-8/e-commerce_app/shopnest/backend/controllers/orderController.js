@@ -1,7 +1,9 @@
 const products = require('../data/products');
 const orders = require('../data/orders');
+const { saveProducts } = require('../data/products');
+const { saveOrders } = require('../data/orders');
 
-const createOrder = (req, res) => {
+const createOrder = async (req, res) => {
   // Use verified user from auth middleware (req.user), not untrusted client body
   const user = req.user;
 
@@ -9,10 +11,29 @@ const createOrder = (req, res) => {
     return res.status(401).json({ success: false, message: 'Authentication required' });
   }
 
-  const { items } = req.body;
+  const { items, shippingAddress, paymentMethod, promoCode } = req.body;
 
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ success: false, message: 'Order items are required and must be a non-empty array' });
+  }
+
+  // Delivery details validation
+  if (!shippingAddress || typeof shippingAddress !== 'object') {
+    return res.status(400).json({ success: false, message: 'Delivery details are required' });
+  }
+
+  const { address, city, phone } = shippingAddress;
+
+  if (!address || !address.trim()) {
+    return res.status(400).json({ success: false, message: 'Full address is required' });
+  }
+
+  if (!city || !city.trim()) {
+    return res.status(400).json({ success: false, message: 'City is required' });
+  }
+
+  if (!phone || !phone.trim() || phone.trim().length < 7) {
+    return res.status(400).json({ success: false, message: 'A valid phone number is required' });
   }
 
   let total = 0;
@@ -54,7 +75,16 @@ const createOrder = (req, res) => {
 
   // Calculate dynamic shipping (Free above 2000, otherwise 99)
   const shipping = total >= 2000 ? 0 : 99;
-  const finalTotal = total + shipping;
+
+  // Calculate promo code discount
+  let discount = 0;
+  let appliedPromo = null;
+  if (promoCode && promoCode.trim().toUpperCase() === 'NEST10') {
+    discount = Math.round(total * 0.10);
+    appliedPromo = 'NEST10';
+  }
+
+  const finalTotal = total - discount + shipping;
 
   // Deduct stock only after all items successfully pass validation
   for (const pItem of processedItems) {
@@ -69,8 +99,16 @@ const createOrder = (req, res) => {
       name: user.name,
       email: user.email
     },
+    shippingAddress: {
+      address: address.trim(),
+      city: city.trim(),
+      phone: phone.trim()
+    },
+    paymentMethod: paymentMethod || 'Cash on Delivery',
     items: processedItems,
     subtotal: total,
+    discount,
+    promoCode: appliedPromo,
     shipping,
     total: finalTotal,
     date: new Date().toISOString(),
@@ -78,6 +116,10 @@ const createOrder = (req, res) => {
   };
 
   orders.unshift(order);
+
+  // Asynchronously persist to JSON
+  if (saveProducts) saveProducts();
+  if (saveOrders) saveOrders();
 
   return res.status(201).json({
     success: true,
@@ -87,7 +129,6 @@ const createOrder = (req, res) => {
 };
 
 const getOrders = (req, res) => {
-  // If user is authenticated, we can return orders for this user or all orders
   const user = req.user;
   if (user && user.email) {
     const userOrders = orders.filter(o => o.customer && o.customer.email === user.email);
