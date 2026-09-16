@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <span class="logo-icon">in</span>
+          <span class="logo-text">LinkedIn</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <h1 class="page-title">All Profiles</h1>
+      <div class="profiles-grid">
+        <% Object.values(profiles).forEach(function(p) { %>
+        <a href="/profile/<%= p.username %>" class="profile-card-link">
+          <div class="mini-card">
+            <div
+              class="mini-cover"
+              style="background-color: <%= p.cover %>"
+            ></div>
+            <img src="<%= p.image %>" alt="<%= p.name %>" class="mini-avatar" />
+            <div class="mini-info">
+              <h2><%= p.name %></h2>
+              <p><%= p.title %></p>
+            </div>
+          </div>
+        </a>
+        <% }); %>
+      </div>
+    </main>
+  </body>
+</html>

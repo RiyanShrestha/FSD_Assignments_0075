@@ -1,0 +1,14 @@
+{
+  "name": "ejs-replica",
+  "version": "1.0.0",
+  "description": "A simple LinkedIn-inspired profile website using Express and EJS",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0"
+  }
+}

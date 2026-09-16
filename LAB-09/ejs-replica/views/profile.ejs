@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <a href="/" class="logo">
+          <span class="logo-icon">in</span>
+          <span class="logo-text">LinkedIn</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <div class="profile-card">
+        <!-- Cover / Banner -->
+        <div
+          class="cover-banner"
+          style="background-color: <%= profile.cover %>"
+        ></div>
+
+        <!-- Profile Image -->
+        <div class="avatar-wrapper">
+          <img
+            src="<%= profile.image %>"
+            alt="<%= profile.name %>"
+            class="avatar"
+          />
+        </div>
+
+        <!-- Profile Details -->
+        <div class="profile-body">
+          <h1 class="profile-name"><%= profile.name %></h1>
+          <p class="profile-title"><%= profile.title %></p>
+          <p class="profile-email"><%= profile.email %></p>
+          <hr class="divider" />
+          <h3 class="section-heading">About</h3>
+          <p class="profile-bio"><%= profile.bio %></p>
+        </div>
+      </div>
+
+      <a href="/" class="back-link">&larr; Back to all profiles</a>
+    </main>
+  </body>
+</html>
