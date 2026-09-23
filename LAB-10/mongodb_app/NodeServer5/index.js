@@ -1,32 +1,43 @@
-// getting-started.js
-
-const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+const ejs = require('ejs');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+require('dotenv').config()
 
 const app = express();
-
-// Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// EJS setup
 app.set('view engine', 'ejs');
 
-// MongoDB connection
-mongoose.connect('mongodb+srv://admin:admin123@cluster0.pyxotom.mongodb.net/?appName=Cluster0')
-    .then(() => {
-        console.log('MongoDB connected successfully');
-    })
-    .catch((err) => {
-        console.log('MongoDB connection error:', err);
+mongoose.
+    connect(process.env.MONGODB_URL).
+    then(() => {
+        console.log('Connected to MongoDB');
+    }).catch((err) => {
+        console.error('Error connecting to MongoDB:', err);
     });
 
-// Route
+const User = mongoose.model('User', {
+    firstName: String,
+    lastName: String,
+    email: String,
+    Phone: Number,
+});
+
+const Child = mongoose.model('Child', {
+    firstName: String,
+    lastName: String,
+    email: String,
+    Phone: Number,
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World' });
 });
 
-// Start server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+const PORT = process.env.PORT;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT} at http://localhost:${PORT}`);
 });
