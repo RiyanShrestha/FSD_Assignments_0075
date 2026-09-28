@@ -32,6 +32,22 @@ const Child = mongoose.model('Child', {
     Phone: Number,
 });
 
+app.get('/children', async (req, res) => {
+    try {
+        const children = await Child.find();
+        res.json({
+            status: 'success',
+            message: 'Data retrieved successfully'
+        })
+    }
+    catch (err) {
+        res.json({
+            status: 'failed',
+            message: 'Error retrieving data'
+        })
+    }
+        })
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World' });
 });
