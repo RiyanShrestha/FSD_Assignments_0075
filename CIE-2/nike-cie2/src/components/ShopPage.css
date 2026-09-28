@@ -1,0 +1,121 @@
+.shop-page {
+  background: #fff;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.shop-header {
+  padding: 70px 5% 40px;
+  text-align: center;
+}
+
+.shop-header h1 {
+  font-size: 42px;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+
+.shop-header p {
+  margin: 0;
+  color: #555;
+  font-size: 16px;
+}
+
+.shop-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 30px;
+}
+
+.shop-toolbar span {
+  font-size: 14px;
+  color: #555;
+}
+
+.shop-toolbar button {
+  background: #fff;
+  border: 1px solid #111;
+  padding: 10px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 0 5%;
+}
+
+.shop-product {
+  cursor: pointer;
+}
+
+.shop-product-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.shop-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.shop-product:hover img {
+  transform: scale(1.04);
+}
+
+.shop-product-info {
+  padding: 14px 2px;
+}
+
+.shop-product-info h2 {
+  font-size: 16px;
+  margin: 0 0 5px;
+  font-weight: 600;
+}
+
+.shop-product-info p {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 8px;
+}
+
+.shop-product-info strong {
+  font-size: 14px;
+  color: #111;
+}
+
+@media (max-width: 900px) {
+  .shop-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .shop-header {
+    padding: 45px 20px 30px;
+  }
+
+  .shop-header h1 {
+    font-size: 32px;
+  }
+
+  .shop-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px;
+  }
+
+  .shop-toolbar {
+    padding: 15px 20px;
+  }
+}
