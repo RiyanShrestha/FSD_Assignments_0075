@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Child — <%= child.firstName %> <%= child.lastName %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/users" class="navbar-brand">&#128106; Family Management</a>
+      <div class="navbar-links">
+        <a href="/users">All Users</a>
+        <a href="/users#createSection">+ Create User</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <a href="/users/<%= child.parentId %>">&#8592; Back to Parent Profile</a>
+    </div>
+
+    <!-- Child Info Card -->
+    <div class="card">
+      <div class="card-header">
+        <h2>&#128118; Child Details</h2>
+        <span class="id-text">ID: <%= child._id %></span>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Full Name</span>
+            <span class="info-value"><%= child.firstName %> <%= child.lastName %></span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Age</span>
+            <span class="info-value"><%= child.age %> years</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value"><%= child.email %></span>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Parent Relationship -->
+        <div class="info-item">
+          <span class="info-label">Parent Relationship</span>
+          <div style="margin-top: 6px;">
+            <span class="relationship-badge">
+              &#128279; Belongs to Parent: <span class="id-text" style="margin-left:4px;"><%= child.parentId %></span>
+            </span>
+          </div>
+          <div style="margin-top: 8px;">
+            <a href="/users/<%= child.parentId %>" class="btn btn-outline btn-sm">View Parent Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Child Form -->
+    <div class="card">
+      <div class="card-header">
+        <h2>&#9998; Update Child</h2>
+      </div>
+      <div class="card-body">
+        <div id="updateMessage"></div>
+
+        <form id="updateForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" value="<%= child.firstName %>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" value="<%= child.lastName %>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="age">Age</label>
+              <input type="number" id="age" name="age" value="<%= child.age %>" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" value="<%= child.email %>" required />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="/users/<%= child.parentId %>" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Delete Section (Danger Zone) -->
+    <div class="card danger-zone">
+      <div class="card-header">
+        <h2>&#9888; Danger Zone</h2>
+      </div>
+      <div class="card-body">
+        <p style="margin-bottom: 12px; font-size: 14px; color: #6b7280;">
+          Deleting this child is permanent and cannot be undone.
+        </p>
+        <button class="btn btn-danger" onclick="deleteChild()">Delete This Child</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Existing JS logic (unchanged) -->
+  <script>
+    // Handle Update Form Submission
+    document.getElementById("updateForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      var data = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        age: document.getElementById("age").value,
+        email: document.getElementById("email").value
+      };
+
+      fetch("/children/<%= child._id %>", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(result) {
+        var msgDiv = document.getElementById("updateMessage");
+        if (result.message) {
+          msgDiv.className = "message success";
+          msgDiv.textContent = result.message;
+          // Reload to show updated data
+          setTimeout(function() { window.location.reload(); }, 1000);
+        } else if (result.error) {
+          msgDiv.className = "message error";
+          msgDiv.textContent = result.error;
+        }
+      })
+      .catch(function(err) {
+        document.getElementById("updateMessage").className = "message error";
+        document.getElementById("updateMessage").textContent = "Error updating child";
+      });
+    });
+
+    // Handle Delete
+    function deleteChild() {
+      if (confirm("Are you sure you want to delete this child?")) {
+        fetch("/children/<%= child._id %>", { method: "DELETE" })
+          .then(function(response) { return response.json(); })
+          .then(function(result) {
+            alert(result.message || "Child deleted");
+            window.location.href = "/users/<%= child.parentId %>";
+          })
+          .catch(function(err) {
+            alert("Error deleting child");
+          });
+      }
+    }
+  </script>
+</body>
+</html>

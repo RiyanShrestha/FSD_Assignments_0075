@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Management — All Users</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/users" class="navbar-brand">&#128106; Family Management</a>
+      <div class="navbar-links">
+        <a href="/users" class="active">All Users</a>
+        <a href="#createSection">+ Create User</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-row">
+        <div>
+          <h1>All Users</h1>
+          <p>Manage users and their family members</p>
+        </div>
+        <a href="#createSection" class="btn btn-success">+ Create User</a>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value"><%= users.length %></div>
+        <div class="stat-label">Total Users</div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Users Directory</h2>
+      </div>
+
+      <% if (users.length === 0) { %>
+        <div class="card-body">
+          <div class="empty-state">
+            <div class="empty-icon">&#128100;</div>
+            <p>No users found. Create one below to get started!</p>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach(function(user) { %>
+                <tr>
+                  <td>
+                    <a href="/users/<%= user._id %>">
+                      <strong><%= user.firstName %> <%= user.lastName %></strong>
+                    </a>
+                  </td>
+                  <td><%= user.email %></td>
+                  <td><%= user.phone %></td>
+                  <td>
+                    <a href="/users/<%= user._id %>" class="btn btn-primary btn-sm">View Profile</a>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Create New User Form -->
+    <div class="card" id="createSection">
+      <div class="card-header">
+        <h2>Create New User</h2>
+      </div>
+      <div class="card-body">
+        <div id="formMessage"></div>
+
+        <form id="createUserForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" name="firstName" placeholder="e.g. Danish" required />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" name="lastName" placeholder="e.g. Khan" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="e.g. danish@example.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="text" id="phone" name="phone" placeholder="e.g. 9876543210" required />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">Create User</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Existing JS logic (unchanged) -->
+  <script>
+    document.getElementById("createUserForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      var data = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value
+      };
+
+      fetch("/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(result) {
+        var msgDiv = document.getElementById("formMessage");
+        if (result.message) {
+          msgDiv.className = "message success";
+          msgDiv.textContent = result.message;
+          setTimeout(function() { window.location.reload(); }, 1000);
+        } else if (result.error) {
+          msgDiv.className = "message error";
+          msgDiv.textContent = result.error;
+        }
+      })
+      .catch(function(err) {
+        var msgDiv = document.getElementById("formMessage");
+        msgDiv.className = "message error";
+        msgDiv.textContent = "Error creating user.";
+      });
+    });
+  </script>
+</body>
+</html>
