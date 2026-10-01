@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import './PromoBanner.css';
 
 function PromoBanner() {
+  const navigate = useNavigate();
+
   return (
     <section className="promo-banner">
       <div className="promo-content">
@@ -14,8 +17,12 @@ function PromoBanner() {
         </p>
 
         <div className="promo-buttons">
-          <button>Shop Men</button>
-          <button>Shop Women</button>
+          <button type="button" onClick={() => navigate('/shop/men')}>
+            Shop Men
+          </button>
+          <button type="button" onClick={() => navigate('/shop/women')}>
+            Shop Women
+          </button>
         </div>
       </div>
     </section>
