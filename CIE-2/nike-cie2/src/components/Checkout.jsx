@@ -7,7 +7,7 @@ import { formatPrice } from '../data/products';
 import './Checkout.css';
 
 function Checkout() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => getCart());
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,16 +20,54 @@ function Checkout() {
     paymentMethod: 'cod',
   });
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setCart(getCart());
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setValidationErrors((prev) => ({ ...prev, [name]: '' }));
     setError('');
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    if (!formData.firstName.trim()) {
+      errors.firstName = 'First name is required.';
+    }
+    if (!formData.lastName.trim()) {
+      errors.lastName = 'Last name is required.';
+    }
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errors.email = 'Please enter a valid email address.';
+    }
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required.';
+    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/\s+/g, ''))) {
+      errors.phone = 'Please enter a valid 10-digit phone number.';
+    }
+    if (!formData.address.trim()) {
+      errors.address = 'Street address is required.';
+    }
+    if (!formData.city.trim()) {
+      errors.city = 'City is required.';
+    }
+    if (!formData.state.trim()) {
+      errors.state = 'State is required.';
+    }
+    if (!formData.postalCode.trim()) {
+      errors.postalCode = 'Postal code is required.';
+    } else if (!/^[1-9][0-9]{5}$/.test(formData.postalCode.trim())) {
+      errors.postalCode = 'Please enter a valid 6-digit PIN code.';
+    }
+    if (!formData.paymentMethod) {
+      errors.paymentMethod = 'Please choose a payment method.';
+    }
+
+    return errors;
   };
 
   const handlePlaceOrder = (e) => {
@@ -40,18 +78,10 @@ function Checkout() {
       return;
     }
 
-    // Basic validation
-    if (
-      !formData.firstName.trim() ||
-      !formData.lastName.trim() ||
-      !formData.email.trim() ||
-      !formData.phone.trim() ||
-      !formData.address.trim() ||
-      !formData.city.trim() ||
-      !formData.state.trim() ||
-      !formData.postalCode.trim()
-    ) {
-      setError('Please fill in all required customer and delivery fields.');
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      setError('Please correct the highlighted fields before placing your order.');
       return;
     }
 
@@ -98,7 +128,25 @@ function Checkout() {
     navigate('/order-confirmation', { state: { order: orderData } });
   };
 
+  useEffect(() => {
+    const handleCartChange = () => {
+      setCart(getCart());
+    };
+
+    window.addEventListener('cartChange', handleCartChange);
+    window.addEventListener('storage', handleCartChange);
+
+    return () => {
+      window.removeEventListener('cartChange', handleCartChange);
+      window.removeEventListener('storage', handleCartChange);
+    };
+  }, []);
+
   const subtotal = getCartSubtotal(cart);
+
+  useEffect(() => {
+    document.title = 'Checkout | Nike Store';
+  }, []);
 
   if (cart.length === 0) {
     return (
@@ -109,8 +157,8 @@ function Checkout() {
           <div className="cart-empty">
             <h2>Your Bag is empty</h2>
             <p>You need at least one product in your bag to proceed with checkout.</p>
-            <Link to="/shop/men" className="shop-now-btn">
-              Explore Shoes
+            <Link to="/shop/all" className="shop-now-btn">
+              Continue Shopping
             </Link>
           </div>
         </main>
@@ -144,6 +192,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="e.g. John"
                   />
+                  {validationErrors.firstName && (
+                    <span className="field-error">{validationErrors.firstName}</span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="lastName">Last Name *</label>
@@ -156,6 +207,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="e.g. Doe"
                   />
+                  {validationErrors.lastName && (
+                    <span className="field-error">{validationErrors.lastName}</span>
+                  )}
                 </div>
               </div>
 
@@ -171,6 +225,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="john@example.com"
                   />
+                  {validationErrors.email && (
+                    <span className="field-error">{validationErrors.email}</span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="phone">Phone Number *</label>
@@ -183,6 +240,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="e.g. 9876543210"
                   />
+                  {validationErrors.phone && (
+                    <span className="field-error">{validationErrors.phone}</span>
+                  )}
                 </div>
               </div>
             </section>
@@ -201,6 +261,9 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="Apartment, suite, street"
                 />
+                {validationErrors.address && (
+                  <span className="field-error">{validationErrors.address}</span>
+                )}
               </div>
 
               <div className="form-grid-2">
@@ -215,6 +278,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="e.g. Mumbai"
                   />
+                  {validationErrors.city && (
+                    <span className="field-error">{validationErrors.city}</span>
+                  )}
                 </div>
                 <div className="form-group">
                   <label htmlFor="state">State *</label>
@@ -227,6 +293,9 @@ function Checkout() {
                     onChange={handleChange}
                     placeholder="e.g. Maharashtra"
                   />
+                  {validationErrors.state && (
+                    <span className="field-error">{validationErrors.state}</span>
+                  )}
                 </div>
               </div>
 
@@ -241,6 +310,9 @@ function Checkout() {
                   onChange={handleChange}
                   placeholder="e.g. 400001"
                 />
+                {validationErrors.postalCode && (
+                  <span className="field-error">{validationErrors.postalCode}</span>
+                )}
               </div>
             </section>
 
@@ -296,6 +368,9 @@ function Checkout() {
             </section>
 
             {error && <div className="form-error">{error}</div>}
+            {validationErrors.paymentMethod && (
+              <div className="form-error">{validationErrors.paymentMethod}</div>
+            )}
 
             <button type="submit" className="place-order-btn">
               Place Order • {formatPrice(subtotal)}

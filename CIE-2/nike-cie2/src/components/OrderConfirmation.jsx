@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -6,6 +7,10 @@ import './OrderConfirmation.css';
 
 function OrderConfirmation() {
   const location = useLocation();
+
+  useEffect(() => {
+    document.title = 'Order Confirmed | Nike Store';
+  }, []);
 
   // Retrieve order from state or localStorage
   let order = location.state?.order;
@@ -26,13 +31,18 @@ function OrderConfirmation() {
         <Navbar />
         <main className="confirmation-page">
           <div className="confirmation-card">
-            <h1>No Order Found</h1>
+            <h1>No recent order found.</h1>
             <p className="confirmation-subtitle">
-              We couldn't find any recent order details.
+              We couldn't find any recent order details. You can keep shopping or head back home.
             </p>
-            <Link to="/" className="continue-shopping-btn">
-              Go to Home
-            </Link>
+            <div className="confirmation-actions">
+              <Link to="/shop/all" className="continue-shopping-btn">
+                Continue Shopping
+              </Link>
+              <Link to="/" className="continue-shopping-btn secondary">
+                Go Home
+              </Link>
+            </div>
           </div>
         </main>
         <Footer />

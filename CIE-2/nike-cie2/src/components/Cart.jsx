@@ -12,14 +12,14 @@ import { formatPrice } from '../data/products';
 import './Cart.css';
 
 function Cart() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => getCart());
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Initial load
-    setCart(getCart());
+    document.title = 'Shopping Bag | Nike Store';
+  }, []);
 
-    // Listen to changes
+  useEffect(() => {
     const handleCartChange = () => {
       setCart(getCart());
     };

@@ -3,24 +3,30 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { products } from '../data/products';
+import NotFound from './NotFound';
 import './ShopPage.css';
 
 function ShopPage() {
   const { category = 'all' } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialSearch = searchParams.get('search') || '';
-
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [sortBy, setSortBy] = useState('default');
 
-  // Keep search input in sync if URL query parameter changes
-  useEffect(() => {
-    setSearchQuery(searchParams.get('search') || '');
-  }, [searchParams]);
-
   const normalizedCategory = category.toLowerCase();
+  const validCategories = ['all', 'men', 'women', 'sale'];
+  const searchQuery = searchParams.get('search') || '';
 
-  // 1. Filter by category
+  const title =
+    normalizedCategory === 'all'
+      ? 'All Shoes'
+      : normalizedCategory === 'sale'
+      ? 'Sale'
+      : normalizedCategory.charAt(0).toUpperCase() + normalizedCategory.slice(1);
+  const pageTitle = validCategories.includes(normalizedCategory) ? title : 'Category Not Found';
+
+  useEffect(() => {
+    document.title = `${pageTitle} | Nike Store`;
+  }, [pageTitle]);
+
   const baseCategoryProducts = useMemo(() => {
     if (normalizedCategory === 'men') {
       return products.filter((p) => p.gender === 'men');
@@ -28,11 +34,9 @@ function ShopPage() {
     if (normalizedCategory === 'women') {
       return products.filter((p) => p.gender === 'women');
     }
-    // 'all', 'sale', etc.
     return products;
   }, [normalizedCategory]);
 
-  // 2. Filter by search query and sort by price
   const filteredProducts = useMemo(() => {
     let result = [...baseCategoryProducts];
 
@@ -56,10 +60,15 @@ function ShopPage() {
     return result;
   }, [baseCategoryProducts, searchQuery, sortBy]);
 
-  const title =
-    normalizedCategory === 'all'
-      ? 'All Shoes'
-      : normalizedCategory.charAt(0).toUpperCase() + normalizedCategory.slice(1);
+  if (!validCategories.includes(normalizedCategory)) {
+    return (
+      <NotFound
+        heading="Category Not Found"
+        message="This collection is not available right now. Explore our latest styles instead."
+        continueText="Back to Shop"
+      />
+    );
+  }
 
   return (
     <>
@@ -89,7 +98,6 @@ function ShopPage() {
               value={searchQuery}
               onChange={(e) => {
                 const val = e.target.value;
-                setSearchQuery(val);
                 if (val) {
                   setSearchParams({ search: val });
                 } else {
@@ -121,7 +129,6 @@ function ShopPage() {
                 type="button"
                 className="clear-btn"
                 onClick={() => {
-                  setSearchQuery('');
                   setSearchParams({});
                   setSortBy('default');
                 }}

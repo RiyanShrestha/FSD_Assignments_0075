@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 function Footer() {
@@ -19,11 +20,10 @@ function Footer() {
         </div>
 
         <div className="footer-column">
-          <h3>About Nike</h3>
-          <p>News</p>
-          <p>Careers</p>
-          <p>Investors</p>
-          <p>Sustainability</p>
+          <h3>Company</h3>
+          <Link to="/privacy-policy">Privacy Policy</Link>
+          <Link to="/terms">Terms & Conditions</Link>
+          <Link to="/shop/all">Shop</Link>
         </div>
 
         <div className="footer-column">

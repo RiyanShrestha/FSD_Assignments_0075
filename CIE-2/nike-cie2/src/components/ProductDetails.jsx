@@ -1,19 +1,25 @@
-import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { getProductById } from '../data/products';
 import { addToCart } from '../utils/cart';
 import { isInWishlist, toggleWishlist } from '../utils/wishlist';
+import NotFound from './NotFound';
 import './ProductDetails.css';
 
 function ProductDetails() {
   const { id } = useParams();
   const [selectedSize, setSelectedSize] = useState(null);
   const [feedback, setFeedback] = useState('');
-  const [favorited, setFavorited] = useState(isInWishlist(id));
+  const [favorited, setFavorited] = useState(() => (id ? isInWishlist(id) : false));
 
   const product = getProductById(id);
+  const pageTitle = product ? `${product.name} | Nike Store` : 'Product Not Found | Nike Store';
+
+  useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
 
   const handleToggleWishlist = () => {
     if (!product) return;
@@ -23,19 +29,11 @@ function ProductDetails() {
 
   if (!product) {
     return (
-      <>
-        <Navbar />
-        <main className="product-not-found">
-          <h1>Product Not Found</h1>
-          <p>The product you are looking for does not exist.</p>
-          <div style={{ marginTop: '20px' }}>
-            <Link to="/" style={{ textDecoration: 'underline', fontWeight: 600 }}>
-              Return to Home
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </>
+      <NotFound
+        heading="Product Not Found"
+        message="The product you are looking for is unavailable or no longer exists."
+        continueText="Back to Shop"
+      />
     );
   }
 

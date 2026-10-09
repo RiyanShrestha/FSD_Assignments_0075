@@ -6,11 +6,13 @@ import { getWishlist, removeFromWishlist } from '../utils/wishlist';
 import './Wishlist.css';
 
 function Wishlist() {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => getWishlist());
 
   useEffect(() => {
-    setItems(getWishlist());
+    document.title = 'Wishlist | Nike Store';
+  }, []);
 
+  useEffect(() => {
     const handleWishlistChange = () => {
       setItems(getWishlist());
     };
@@ -45,8 +47,8 @@ function Wishlist() {
             <p>
               Items added to your Favourites will be saved here so you can check back anytime.
             </p>
-            <Link to="/shop/men" className="wishlist-shop-btn">
-              Explore Shoes
+            <Link to="/shop/all" className="wishlist-shop-btn">
+              Explore Products
             </Link>
           </div>
         ) : (

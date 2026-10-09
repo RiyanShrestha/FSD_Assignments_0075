@@ -26,13 +26,16 @@
   margin-bottom: 20px;
 }
 
-.footer-column p {
+.footer-column p,
+.footer-column a {
   color: #aaa;
   margin: 10px 0;
+  display: block;
   cursor: pointer;
 }
 
-.footer-column p:hover {
+.footer-column p:hover,
+.footer-column a:hover {
   color: white;
 }
 
