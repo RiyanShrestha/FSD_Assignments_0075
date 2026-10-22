@@ -15,6 +15,12 @@
         <li><a href="/students" class="active">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/students/<%= student._id %>">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -22,7 +28,28 @@
   <main>
     <div class="detail-container">
       <a href="/students" class="back-link">&larr; Back to Students</a>
-      <h1><%= student.fullName %></h1>
+
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <h1><%= student.fullName %></h1>
+        <% const isCurrentSession = (typeof currentStudent !== 'undefined' && currentStudent && currentStudent._id.toString() === student._id.toString()); %>
+        <% if (isCurrentSession) { %>
+          <span class="status status-approved" style="font-size: 0.9rem;">✓ Currently Logged In</span>
+        <% } else { %>
+          <form action="/login" method="POST" style="margin: 0;">
+            <input type="hidden" name="studentId" value="<%= student._id %>">
+            <input type="hidden" name="redirect" value="/students/<%= student._id %>">
+            <button type="submit" class="btn btn-secondary">🔑 Log In as this Student</button>
+          </form>
+        <% } %>
+      </div>
 
       <div class="detail-card">
         <div class="detail-row">
@@ -44,7 +71,7 @@
       </div>
 
       <h2>Lost Item Reports</h2>
-      <% if (lostItems.length === 0) { %>
+      <% if (!lostItems || lostItems.length === 0) { %>
         <p class="muted">This student has not reported any lost items.</p>
       <% } else { %>
         <table>
@@ -72,7 +99,7 @@
       <% } %>
 
       <h2>Found Item Reports</h2>
-      <% if (foundItems.length === 0) { %>
+      <% if (!foundItems || foundItems.length === 0) { %>
         <p class="muted">This student has not reported any found items.</p>
       <% } else { %>
         <table>
@@ -92,7 +119,49 @@
                 <td><%= item.category %></td>
                 <td><span class="status status-<%= (item.status || 'unclaimed').toLowerCase() %>"><%= item.status || 'Unclaimed' %></span></td>
                 <td><%= item.dateFound ? new Date(item.dateFound).toLocaleDateString() : 'N/A' %></td>
-                <td><a href="/found-items/<%= item._id %>" class="btn btn-small">View</a></td>
+                <td><a href="/found-items/<%= item._id %>" class="btn btn-small">View Details</a></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+
+      <h2>Claims Submitted by this Student</h2>
+      <% if (!claims || claims.length === 0) { %>
+        <p class="muted">This student has not submitted any claims.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Found Item</th>
+              <th>Category</th>
+              <th>Claim Reason</th>
+              <th>Status</th>
+              <th>Date Claimed</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% claims.forEach(function(claim) { %>
+              <tr>
+                <td>
+                  <% if (claim.foundItemId && claim.foundItemId.itemName) { %>
+                    <strong><%= claim.foundItemId.itemName %></strong>
+                  <% } else { %>
+                    <em>Unknown Item</em>
+                  <% } %>
+                </td>
+                <td><%= (claim.foundItemId && claim.foundItemId.category) ? claim.foundItemId.category : 'N/A' %></td>
+                <td><%= claim.reason %></td>
+                <td><span class="status status-<%= claim.status.toLowerCase() %>"><%= claim.status %></span></td>
+                <td><%= claim.createdAt ? new Date(claim.createdAt).toLocaleDateString() : 'N/A' %></td>
+                <td>
+                  <% if (claim.foundItemId && claim.foundItemId._id) { %>
+                    <a href="/found-items/<%= claim.foundItemId._id %>" class="btn btn-small">View Item</a>
+                  <% } else { %>
+                    -
+                  <% } %>
+                </td>
               </tr>
             <% }); %>
           </tbody>

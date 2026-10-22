@@ -15,6 +15,12 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items" class="active">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/found-items">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -29,11 +35,47 @@
       <div class="alert alert-success"><%= success %></div>
     <% } %>
 
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <!-- Search / Filter Form -->
+    <form action="/found-items" method="GET" class="search-form">
+      <input type="text" name="search" placeholder="Search by item name..." 
+             value="<%= typeof search !== 'undefined' ? search : '' %>">
+      <select name="category">
+        <option value="">All Categories</option>
+        <option value="Electronics" <%= typeof category !== 'undefined' && category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+        <option value="Books" <%= typeof category !== 'undefined' && category === 'Books' ? 'selected' : '' %>>Books</option>
+        <option value="Clothing" <%= typeof category !== 'undefined' && category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+        <option value="Accessories" <%= typeof category !== 'undefined' && category === 'Accessories' ? 'selected' : '' %>>Accessories</option>
+        <option value="Documents" <%= typeof category !== 'undefined' && category === 'Documents' ? 'selected' : '' %>>Documents</option>
+        <option value="Keys" <%= typeof category !== 'undefined' && category === 'Keys' ? 'selected' : '' %>>Keys</option>
+        <option value="Bags" <%= typeof category !== 'undefined' && category === 'Bags' ? 'selected' : '' %>>Bags</option>
+        <option value="Other" <%= typeof category !== 'undefined' && category === 'Other' ? 'selected' : '' %>>Other</option>
+      </select>
+      <input type="text" name="location" placeholder="Filter by found location..." 
+             value="<%= typeof location !== 'undefined' ? location : '' %>">
+      <select name="status">
+        <option value="">All Statuses</option>
+        <option value="Unclaimed" <%= typeof status !== 'undefined' && status === 'Unclaimed' ? 'selected' : '' %>>Unclaimed</option>
+        <option value="Claimed" <%= typeof status !== 'undefined' && status === 'Claimed' ? 'selected' : '' %>>Claimed</option>
+        <option value="Returned" <%= typeof status !== 'undefined' && status === 'Returned' ? 'selected' : '' %>>Returned</option>
+      </select>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="/found-items" class="btn btn-secondary">Clear</a>
+    </form>
+
     <% if (foundItems.length === 0) { %>
       <div class="empty-state">
-        <h2>No found items reported</h2>
-        <p>No items have been reported as found yet.</p>
-        <a href="/found-items/new" class="btn btn-primary">Report First Found Item</a>
+        <h2>No found items match your criteria</h2>
+        <% if (typeof search !== 'undefined' && (search || category || location || status)) { %>
+          <p>No found items match your search filters. Try adjusting your criteria.</p>
+          <a href="/found-items" class="btn btn-secondary">Clear Filters</a>
+        <% } else { %>
+          <p>No items have been reported as found yet.</p>
+          <a href="/found-items/new" class="btn btn-primary">Report First Found Item</a>
+        <% } %>
       </div>
     <% } else { %>
       <div class="items-grid">

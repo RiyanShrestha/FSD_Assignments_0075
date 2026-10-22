@@ -15,6 +15,12 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items" class="active">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/found-items/<%= item._id %>">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -22,6 +28,15 @@
   <main>
     <div class="detail-container">
       <a href="/found-items" class="back-link">&larr; Back to Found Items</a>
+
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
       <h1><%= item.itemName %></h1>
       <span class="status status-<%= (item.status || 'unclaimed').toLowerCase() %>"><%= item.status || 'Unclaimed' %></span>
 
@@ -58,6 +73,175 @@
           <span><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A' %></span>
         </div>
       </div>
+
+      <%
+        const reporterId = (item.reportedBy && item.reportedBy._id) ? item.reportedBy._id.toString() : (item.reportedBy ? item.reportedBy.toString() : '');
+        const currentId = (typeof currentStudent !== 'undefined' && currentStudent) ? currentStudent._id.toString() : '';
+        const isReporter = currentId && (currentId === reporterId);
+        const userClaim = (claims && currentId) ? claims.find(c => {
+          const claimantId = (c.claimedBy && c.claimedBy._id) ? c.claimedBy._id.toString() : (c.claimedBy ? c.claimedBy.toString() : '');
+          return claimantId === currentId;
+        }) : null;
+      %>
+
+      <!-- CLAIMS SECTION -->
+      <% if (isReporter) { %>
+        <!-- Reporter's View: Review and manage claims -->
+        <h2>Claims Received (<%= claims.length %>)</h2>
+        <p class="muted" style="margin-bottom: 1rem;">
+          You reported finding this item. As the finder, you can review claims and approve or reject them.
+          Approving a claim marks the item as <strong>Returned</strong> and rejects all other pending claims.
+        </p>
+
+        <% if (claims.length === 0) { %>
+          <div class="detail-card">
+            <p class="muted">No students have submitted a claim for this item yet.</p>
+          </div>
+        <% } else { %>
+          <table>
+            <thead>
+              <tr>
+                <th>Claimant</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% claims.forEach(function(claim) { %>
+                <tr>
+                  <td>
+                    <% if (claim.claimedBy && claim.claimedBy.fullName) { %>
+                      <strong><a href="/students/<%= claim.claimedBy._id %>"><%= claim.claimedBy.fullName %></a></strong><br>
+                      <small style="color: #64748b;"><%= claim.claimedBy.email %></small><br>
+                      <small style="color: #64748b;"><%= claim.claimedBy.department %> | <%= claim.claimedBy.contactNumber %></small>
+                    <% } else { %>
+                      <em>Unknown student</em>
+                    <% } %>
+                  </td>
+                  <td>
+                    <div class="claim-box">
+                      <%= claim.reason %>
+                    </div>
+                  </td>
+                  <td><%= claim.createdAt ? new Date(claim.createdAt).toLocaleDateString() : 'N/A' %></td>
+                  <td>
+                    <span class="status status-<%= claim.status.toLowerCase() %>"><%= claim.status %></span>
+                  </td>
+                  <td>
+                    <% if (claim.status === 'Pending' && item.status !== 'Returned') { %>
+                      <div class="actions-inline">
+                        <form action="/claims/<%= claim._id %>/status" method="POST" style="display:inline;">
+                          <input type="hidden" name="_method" value="PATCH">
+                          <input type="hidden" name="status" value="Approved">
+                          <button type="submit" class="btn btn-small btn-success" 
+                                  onclick="return confirm('Are you sure you want to approve this claim? The item will be marked as Returned.');">
+                            Approve
+                          </button>
+                        </form>
+                        <form action="/claims/<%= claim._id %>/status" method="POST" style="display:inline;">
+                          <input type="hidden" name="_method" value="PATCH">
+                          <input type="hidden" name="status" value="Rejected">
+                          <button type="submit" class="btn btn-small btn-danger" 
+                                  onclick="return confirm('Are you sure you want to reject this claim?');">
+                            Reject
+                          </button>
+                        </form>
+                      </div>
+                    <% } else if (claim.status === 'Approved') { %>
+                      <span style="color: #16a34a; font-weight: 600; font-size: 0.85rem;">✓ Returned to claimant</span>
+                    <% } else if (claim.status === 'Rejected') { %>
+                      <span style="color: #dc2626; font-size: 0.85rem;">✗ Rejected</span>
+                    <% } else if (item.status === 'Returned') { %>
+                      <span class="muted" style="font-size: 0.85rem;">Item already returned</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        <% } %>
+
+      <% } else { %>
+        <!-- Non-Reporter View: Claim or check claim status -->
+
+        <% if (item.status === 'Returned') { %>
+          <div class="detail-card" style="margin-top: 1.5rem; border-left: 4px solid #16a34a;">
+            <h2>Item Status: Returned</h2>
+            <p>This item has already been verified and returned to its rightful owner. New claims cannot be submitted.</p>
+          </div>
+        <% } else if (userClaim) { %>
+          <!-- Current student has already submitted a claim -->
+          <div class="detail-card" style="margin-top: 1.5rem;">
+            <h2>Your Claim</h2>
+            <div class="detail-row">
+              <span class="label">Claim Status:</span>
+              <span><span class="status status-<%= userClaim.status.toLowerCase() %>"><%= userClaim.status %></span></span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Submitted On:</span>
+              <span><%= userClaim.createdAt ? new Date(userClaim.createdAt).toLocaleDateString() : 'N/A' %></span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Your Reason:</span>
+              <span><%= userClaim.reason %></span>
+            </div>
+            <p class="muted" style="margin-top: 1rem; font-size: 0.9rem;">
+              You have already filed a claim for this item. You cannot submit multiple claims.
+            </p>
+          </div>
+        <% } else { %>
+          <!-- Show Claim Form -->
+          <div class="detail-card" style="margin-top: 1.5rem;">
+            <h2>Claim This Item</h2>
+            <p class="muted" style="margin-bottom: 1rem;">
+              If this item belongs to you, submit a claim below describing identifiable details.
+            </p>
+
+            <form action="/found-items/<%= item._id %>/claims" method="POST">
+              <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+                <div class="form-group">
+                  <label>Claiming As</label>
+                  <p><strong><%= currentStudent.fullName %></strong> (<%= currentStudent.email %>) - <%= currentStudent.department %></p>
+                </div>
+              <% } else { %>
+                <div class="form-group">
+                  <label for="claimedBy">Select Your Student Account *</label>
+                  <select id="claimedBy" name="claimedBy" required>
+                    <option value="">-- Choose your student profile --</option>
+                    <% if (typeof students !== 'undefined' && students) { %>
+                      <% students.forEach(function(student) { %>
+                        <% if (reporterId !== student._id.toString()) { %>
+                          <option value="<%= student._id %>">
+                            <%= student.fullName %> (<%= student.email %>) - <%= student.department %>
+                          </option>
+                        <% } %>
+                      <% }); %>
+                    <% } %>
+                  </select>
+                  <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.35rem;">
+                    Or <a href="/login?redirect=/found-items/<%= item._id %>">log in to your session</a> before submitting.
+                  </p>
+                </div>
+              <% } %>
+
+              <div class="form-group">
+                <label for="reason">Proof of Ownership / Reason *</label>
+                <textarea id="reason" name="reason" rows="3" 
+                          placeholder="Describe identifiable marks, exact date/location lost, contents, brand details, or serial numbers (minimum 5 characters)..."
+                          minlength="5" required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit Claim</button>
+              </div>
+            </form>
+          </div>
+        <% } %>
+
+      <% } %>
+
     </div>
   </main>
 

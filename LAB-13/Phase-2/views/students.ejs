@@ -15,6 +15,12 @@
         <li><a href="/students" class="active">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/students">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -27,6 +33,10 @@
 
     <% if (typeof success !== 'undefined' && success) { %>
       <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error"><%= error %></div>
     <% } %>
 
     <% if (students.length === 0) { %>
@@ -53,7 +63,21 @@
               <td><%= student.email %></td>
               <td><%= student.department %></td>
               <td><%= student.contactNumber %></td>
-              <td><a href="/students/<%= student._id %>" class="btn btn-small">View</a></td>
+              <td>
+                <div class="actions-inline">
+                  <a href="/students/<%= student._id %>" class="btn btn-small">View</a>
+                  <% const isCurrent = (typeof currentStudent !== 'undefined' && currentStudent && currentStudent._id.toString() === student._id.toString()); %>
+                  <% if (isCurrent) { %>
+                    <span style="font-size: 0.8rem; color: #16a34a; font-weight: 600;">Active</span>
+                  <% } else { %>
+                    <form action="/login" method="POST" style="margin: 0; display: inline;">
+                      <input type="hidden" name="studentId" value="<%= student._id %>">
+                      <input type="hidden" name="redirect" value="/students">
+                      <button type="submit" class="btn btn-small btn-secondary" title="Log in as this student">Log In</button>
+                    </form>
+                  <% } %>
+                </div>
+              </td>
             </tr>
           <% }); %>
         </tbody>

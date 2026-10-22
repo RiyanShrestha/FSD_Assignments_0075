@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Login - Campus Lost & Found</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🔍 Campus Lost & Found</a>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
+        <li><a href="/lost-items">Lost Items</a></li>
+        <li><a href="/found-items">Found Items</a></li>
+        <li><a href="/login" class="active">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-container">
+      <h1>Student Login</h1>
+      <p class="muted" style="margin-bottom: 1.5rem;">
+        Authenticate your student session to report items, file claims, and approve/reject claims for items you found.
+      </p>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success"><%= success %></div>
+      <% } %>
+
+      <% if (students && students.length > 0) { %>
+        <form action="/login" method="POST">
+          <input type="hidden" name="redirect" value="<%= typeof redirect !== 'undefined' ? redirect : '' %>">
+
+          <div class="form-group">
+            <label for="studentId">Select Your Student Account</label>
+            <select id="studentId" name="studentId">
+              <option value="">-- Choose registered student --</option>
+              <% students.forEach(function(student) { %>
+                <option value="<%= student._id %>">
+                  <%= student.fullName %> (<%= student.email %>) - <%= student.department %>
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <p style="text-align: center; margin: 1rem 0; color: #64748b; font-weight: 600;">— OR ENTER EMAIL —</p>
+
+          <div class="form-group">
+            <label for="email">Student Email Address</label>
+            <input type="email" id="email" name="email" placeholder="e.g. name@college.edu">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Log In</button>
+          </div>
+        </form>
+      <% } else { %>
+        <div class="empty-state">
+          <h2>No students registered</h2>
+          <p>You must register a student profile first before logging in.</p>
+          <a href="/students/new" class="btn btn-primary">Register Student Profile</a>
+        </div>
+      <% } %>
+
+      <div style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem;">
+        <span class="muted">New student?</span> <a href="/students/new">Register here</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Lost & Found Management System</p>
+  </footer>
+</body>
+</html>

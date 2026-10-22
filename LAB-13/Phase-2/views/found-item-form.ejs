@@ -15,6 +15,12 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items" class="active">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/found-items/new">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -78,9 +84,14 @@
             <label for="reportedBy">Reported By (Student) *</label>
             <select id="reportedBy" name="reportedBy" required>
               <option value="">Select Student</option>
+              <% 
+                const activeReporter = (typeof reportedBy !== 'undefined' && reportedBy) 
+                  ? reportedBy.toString() 
+                  : ((typeof currentStudent !== 'undefined' && currentStudent) ? currentStudent._id.toString() : '');
+              %>
               <% students.forEach(function(student) { %>
                 <option value="<%= student._id %>" 
-                        <%= typeof reportedBy !== 'undefined' && reportedBy && reportedBy.toString() === student._id.toString() ? 'selected' : '' %>>
+                        <%= activeReporter === student._id.toString() ? 'selected' : '' %>>
                   <%= student.fullName %> (<%= student.email %>)
                 </option>
               <% }); %>

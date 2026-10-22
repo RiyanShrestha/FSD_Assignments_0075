@@ -15,14 +15,28 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
 
   <main>
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
     <section class="hero">
       <h1>Campus Lost & Found Management System</h1>
-      <p>Report lost items, log found items, and help reunite belongings with their owners.</p>
+      <p>Report lost items, log found items, submit claims, and manage verified item returns.</p>
     </section>
 
     <section class="dashboard">
@@ -53,6 +67,15 @@
         <div class="card-actions">
           <a href="/found-items" class="btn btn-secondary">View All</a>
           <a href="/found-items/new" class="btn btn-primary">Report Found</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🤝 Claims</h2>
+        <p class="count"><%= typeof claimCount !== 'undefined' ? claimCount : 0 %></p>
+        <p>Submitted ownership claims</p>
+        <div class="card-actions">
+          <a href="/found-items" class="btn btn-secondary">Browse Items to Claim</a>
         </div>
       </div>
     </section>

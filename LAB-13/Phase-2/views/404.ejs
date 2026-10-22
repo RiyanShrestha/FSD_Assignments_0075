@@ -15,6 +15,12 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items">Lost Items</a></li>
         <li><a href="/found-items">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>

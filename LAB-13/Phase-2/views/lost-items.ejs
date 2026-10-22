@@ -15,6 +15,12 @@
         <li><a href="/students">Students</a></li>
         <li><a href="/lost-items" class="active">Lost Items</a></li>
         <li><a href="/found-items">Found Items</a></li>
+        <% if (typeof currentStudent !== 'undefined' && currentStudent) { %>
+          <li><a href="/students/<%= currentStudent._id %>" class="user-badge" title="Logged in as <%= currentStudent.fullName %>">👤 <%= currentStudent.fullName %></a></li>
+          <li><a href="/logout">Logout</a></li>
+        <% } else { %>
+          <li><a href="/login?redirect=/lost-items">Login</a></li>
+        <% } %>
       </ul>
     </div>
   </nav>
@@ -27,6 +33,10 @@
 
     <% if (typeof success !== 'undefined' && success) { %>
       <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error"><%= error %></div>
     <% } %>
 
     <!-- Search / Filter Form -->
@@ -46,6 +56,12 @@
       </select>
       <input type="text" name="location" placeholder="Filter by location..." 
              value="<%= typeof location !== 'undefined' ? location : '' %>">
+      <select name="status">
+        <option value="">All Statuses</option>
+        <option value="Lost" <%= typeof status !== 'undefined' && status === 'Lost' ? 'selected' : '' %>>Lost</option>
+        <option value="Found" <%= typeof status !== 'undefined' && status === 'Found' ? 'selected' : '' %>>Found</option>
+        <option value="Returned" <%= typeof status !== 'undefined' && status === 'Returned' ? 'selected' : '' %>>Returned</option>
+      </select>
       <button type="submit" class="btn btn-primary">Search</button>
       <a href="/lost-items" class="btn btn-secondary">Clear</a>
     </form>
@@ -53,7 +69,7 @@
     <% if (lostItems.length === 0) { %>
       <div class="empty-state">
         <h2>No lost items found</h2>
-        <% if (typeof search !== 'undefined' && (search || category || location)) { %>
+        <% if (typeof search !== 'undefined' && (search || category || location || status)) { %>
           <p>No items match your search criteria. Try different filters.</p>
           <a href="/lost-items" class="btn btn-secondary">Clear Filters</a>
         <% } else { %>
