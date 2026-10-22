@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Found Items - Campus Lost & Found</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🔍 Campus Lost & Found</a>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
+        <li><a href="/lost-items">Lost Items</a></li>
+        <li><a href="/found-items" class="active">Found Items</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>Found Items</h1>
+      <a href="/found-items/new" class="btn btn-primary">+ Report Found Item</a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <% if (foundItems.length === 0) { %>
+      <div class="empty-state">
+        <h2>No found items reported</h2>
+        <p>No items have been reported as found yet.</p>
+        <a href="/found-items/new" class="btn btn-primary">Report First Found Item</a>
+      </div>
+    <% } else { %>
+      <div class="items-grid">
+        <% foundItems.forEach(function(item) { %>
+          <div class="item-card">
+            <div class="item-card-header">
+              <h3><%= item.itemName %></h3>
+              <span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
+            </div>
+            <p class="item-category"><strong>Category:</strong> <%= item.category %></p>
+            <p><strong>Location:</strong> <%= item.foundLocation %></p>
+            <p><strong>Date Found:</strong> <%= item.dateFound.toLocaleDateString() %></p>
+            <p class="item-description"><%= item.description.substring(0, 100) %><%= item.description.length > 100 ? '...' : '' %></p>
+            <a href="/found-items/<%= item._id %>" class="btn btn-small">View Details</a>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Lost & Found Management System</p>
+  </footer>
+</body>
+</html>

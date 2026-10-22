@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost Items - Campus Lost & Found</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🔍 Campus Lost & Found</a>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
+        <li><a href="/lost-items" class="active">Lost Items</a></li>
+        <li><a href="/found-items">Found Items</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h1>Lost Items</h1>
+      <a href="/lost-items/new" class="btn btn-primary">+ Report Lost Item</a>
+    </div>
+
+    <% if (typeof success !== 'undefined' && success) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+    <!-- Search / Filter Form -->
+    <form action="/lost-items" method="GET" class="search-form">
+      <input type="text" name="search" placeholder="Search by item name..." 
+             value="<%= typeof search !== 'undefined' ? search : '' %>">
+      <select name="category">
+        <option value="">All Categories</option>
+        <option value="Electronics" <%= typeof category !== 'undefined' && category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+        <option value="Books" <%= typeof category !== 'undefined' && category === 'Books' ? 'selected' : '' %>>Books</option>
+        <option value="Clothing" <%= typeof category !== 'undefined' && category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+        <option value="Accessories" <%= typeof category !== 'undefined' && category === 'Accessories' ? 'selected' : '' %>>Accessories</option>
+        <option value="Documents" <%= typeof category !== 'undefined' && category === 'Documents' ? 'selected' : '' %>>Documents</option>
+        <option value="Keys" <%= typeof category !== 'undefined' && category === 'Keys' ? 'selected' : '' %>>Keys</option>
+        <option value="Bags" <%= typeof category !== 'undefined' && category === 'Bags' ? 'selected' : '' %>>Bags</option>
+        <option value="Other" <%= typeof category !== 'undefined' && category === 'Other' ? 'selected' : '' %>>Other</option>
+      </select>
+      <input type="text" name="location" placeholder="Filter by location..." 
+             value="<%= typeof location !== 'undefined' ? location : '' %>">
+      <button type="submit" class="btn btn-primary">Search</button>
+      <a href="/lost-items" class="btn btn-secondary">Clear</a>
+    </form>
+
+    <% if (lostItems.length === 0) { %>
+      <div class="empty-state">
+        <h2>No lost items found</h2>
+        <% if (typeof search !== 'undefined' && (search || category || location)) { %>
+          <p>No items match your search criteria. Try different filters.</p>
+          <a href="/lost-items" class="btn btn-secondary">Clear Filters</a>
+        <% } else { %>
+          <p>No items have been reported lost yet.</p>
+          <a href="/lost-items/new" class="btn btn-primary">Report First Lost Item</a>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="items-grid">
+        <% lostItems.forEach(function(item) { %>
+          <div class="item-card">
+            <div class="item-card-header">
+              <h3><%= item.itemName %></h3>
+              <span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
+            </div>
+            <p class="item-category"><strong>Category:</strong> <%= item.category %></p>
+            <p><strong>Location:</strong> <%= item.lastSeenLocation %></p>
+            <p><strong>Date Lost:</strong> <%= item.dateLost.toLocaleDateString() %></p>
+            <p class="item-description"><%= item.description.substring(0, 100) %><%= item.description.length > 100 ? '...' : '' %></p>
+            <a href="/lost-items/<%= item._id %>" class="btn btn-small">View Details</a>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Lost & Found Management System</p>
+  </footer>
+</body>
+</html>

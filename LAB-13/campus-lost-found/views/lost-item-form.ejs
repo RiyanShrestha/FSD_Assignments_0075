@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Lost Item - Campus Lost & Found</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🔍 Campus Lost & Found</a>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
+        <li><a href="/lost-items" class="active">Lost Items</a></li>
+        <li><a href="/found-items">Found Items</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <div class="form-container">
+      <h1>Report Lost Item</h1>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error"><%= error %></div>
+      <% } %>
+
+      <% if (students.length === 0) { %>
+        <div class="alert alert-error">
+          No students registered yet. <a href="/students/new">Register a student</a> before reporting items.
+        </div>
+      <% } else { %>
+        <form action="/lost-items" method="POST">
+          <div class="form-group">
+            <label for="itemName">Item Name *</label>
+            <input type="text" id="itemName" name="itemName" 
+                   value="<%= typeof itemName !== 'undefined' ? itemName : '' %>" 
+                   placeholder="e.g. Blue Backpack" required>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category *</label>
+            <select id="category" name="category" required>
+              <option value="">Select Category</option>
+              <option value="Electronics" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+              <option value="Books" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Books' ? 'selected' : '' %>>Books</option>
+              <option value="Clothing" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+              <option value="Accessories" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Accessories' ? 'selected' : '' %>>Accessories</option>
+              <option value="Documents" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Documents' ? 'selected' : '' %>>Documents</option>
+              <option value="Keys" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Keys' ? 'selected' : '' %>>Keys</option>
+              <option value="Bags" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Bags' ? 'selected' : '' %>>Bags</option>
+              <option value="Other" <%= typeof categoryVal !== 'undefined' && categoryVal === 'Other' ? 'selected' : '' %>>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" rows="4" 
+                      placeholder="Describe the item in detail..." required><%= typeof description !== 'undefined' ? description : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="lastSeenLocation">Last Seen Location *</label>
+            <input type="text" id="lastSeenLocation" name="lastSeenLocation" 
+                   value="<%= typeof lastSeenLocation !== 'undefined' ? lastSeenLocation : '' %>" 
+                   placeholder="e.g. Library, 2nd Floor" required>
+          </div>
+
+          <div class="form-group">
+            <label for="dateLost">Date Lost *</label>
+            <input type="date" id="dateLost" name="dateLost" 
+                   value="<%= typeof dateLost !== 'undefined' ? dateLost : '' %>" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reportedBy">Reported By (Student) *</label>
+            <select id="reportedBy" name="reportedBy" required>
+              <option value="">Select Student</option>
+              <% students.forEach(function(student) { %>
+                <option value="<%= student._id %>" 
+                        <%= typeof reportedBy !== 'undefined' && reportedBy === student._id.toString() ? 'selected' : '' %>>
+                  <%= student.fullName %> (<%= student.email %>)
+                </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+            <a href="/lost-items" class="btn btn-secondary">Cancel</a>
+          </div>
+        </form>
+      <% } %>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Lost & Found Management System</p>
+  </footer>
+</body>
+</html>

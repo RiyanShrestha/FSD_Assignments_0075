@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Lost & Found</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">🔍 Campus Lost & Found</a>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/students">Students</a></li>
+        <li><a href="/lost-items">Lost Items</a></li>
+        <li><a href="/found-items">Found Items</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1>Campus Lost & Found Management System</h1>
+      <p>Report lost items, log found items, and help reunite belongings with their owners.</p>
+    </section>
+
+    <section class="dashboard">
+      <div class="card">
+        <h2>📋 Students</h2>
+        <p class="count"><%= studentCount %></p>
+        <p>Registered students</p>
+        <div class="card-actions">
+          <a href="/students" class="btn btn-secondary">View All</a>
+          <a href="/students/new" class="btn btn-primary">Register New</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🔴 Lost Items</h2>
+        <p class="count"><%= lostCount %></p>
+        <p>Items reported lost</p>
+        <div class="card-actions">
+          <a href="/lost-items" class="btn btn-secondary">View All</a>
+          <a href="/lost-items/new" class="btn btn-primary">Report Lost</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🟢 Found Items</h2>
+        <p class="count"><%= foundCount %></p>
+        <p>Items reported found</p>
+        <div class="card-actions">
+          <a href="/found-items" class="btn btn-secondary">View All</a>
+          <a href="/found-items/new" class="btn btn-primary">Report Found</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Campus Lost & Found Management System</p>
+  </footer>
+</body>
+</html>
