@@ -39,7 +39,7 @@
         </div>
         <div class="detail-row">
           <span class="label">Registered On:</span>
-          <span><%= student.createdAt.toLocaleDateString() %></span>
+          <span><%= student.createdAt ? new Date(student.createdAt).toLocaleDateString() : 'N/A' %></span>
         </div>
       </div>
 
@@ -62,8 +62,8 @@
               <tr>
                 <td><%= item.itemName %></td>
                 <td><%= item.category %></td>
-                <td><span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span></td>
-                <td><%= item.dateLost.toLocaleDateString() %></td>
+                <td><span class="status status-<%= (item.status || 'lost').toLowerCase() %>"><%= item.status || 'Lost' %></span></td>
+                <td><%= item.dateLost ? new Date(item.dateLost).toLocaleDateString() : 'N/A' %></td>
                 <td><a href="/lost-items/<%= item._id %>" class="btn btn-small">View</a></td>
               </tr>
             <% }); %>
@@ -90,8 +90,8 @@
               <tr>
                 <td><%= item.itemName %></td>
                 <td><%= item.category %></td>
-                <td><span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span></td>
-                <td><%= item.dateFound.toLocaleDateString() %></td>
+                <td><span class="status status-<%= (item.status || 'unclaimed').toLowerCase() %>"><%= item.status || 'Unclaimed' %></span></td>
+                <td><%= item.dateFound ? new Date(item.dateFound).toLocaleDateString() : 'N/A' %></td>
                 <td><a href="/found-items/<%= item._id %>" class="btn btn-small">View</a></td>
               </tr>
             <% }); %>

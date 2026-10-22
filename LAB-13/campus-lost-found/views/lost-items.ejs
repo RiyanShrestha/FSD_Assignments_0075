@@ -67,12 +67,12 @@
           <div class="item-card">
             <div class="item-card-header">
               <h3><%= item.itemName %></h3>
-              <span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
+              <span class="status status-<%= (item.status || 'lost').toLowerCase() %>"><%= item.status || 'Lost' %></span>
             </div>
             <p class="item-category"><strong>Category:</strong> <%= item.category %></p>
             <p><strong>Location:</strong> <%= item.lastSeenLocation %></p>
-            <p><strong>Date Lost:</strong> <%= item.dateLost.toLocaleDateString() %></p>
-            <p class="item-description"><%= item.description.substring(0, 100) %><%= item.description.length > 100 ? '...' : '' %></p>
+            <p><strong>Date Lost:</strong> <%= item.dateLost ? new Date(item.dateLost).toLocaleDateString() : 'N/A' %></p>
+            <p class="item-description"><%= (item.description || '').substring(0, 100) %><%= (item.description && item.description.length > 100) ? '...' : '' %></p>
             <a href="/lost-items/<%= item._id %>" class="btn btn-small">View Details</a>
           </div>
         <% }); %>

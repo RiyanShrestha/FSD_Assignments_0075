@@ -41,6 +41,11 @@ function isValidObjectId(id) {
   return mongoose.Types.ObjectId.isValid(id);
 }
 
+// Helper: Escape special regex characters to prevent regex search injection / syntax errors
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
+
 // ============================================================
 // ROUTES
 // ============================================================
@@ -176,8 +181,8 @@ app.get('/lost-items', async (req, res) => {
     const filter = {};
 
     if (search && search.trim()) {
-      // Case-insensitive search on item name
-      filter.itemName = { $regex: search.trim(), $options: 'i' };
+      // Case-insensitive search on item name with special characters safely escaped
+      filter.itemName = { $regex: escapeRegex(search.trim()), $options: 'i' };
     }
 
     if (category && category.trim()) {
@@ -185,8 +190,8 @@ app.get('/lost-items', async (req, res) => {
     }
 
     if (location && location.trim()) {
-      // Case-insensitive search on location
-      filter.lastSeenLocation = { $regex: location.trim(), $options: 'i' };
+      // Case-insensitive search on location with special characters safely escaped
+      filter.lastSeenLocation = { $regex: escapeRegex(location.trim()), $options: 'i' };
     }
 
     const lostItems = await LostItem.find(filter).sort({ createdAt: -1 });
@@ -210,8 +215,8 @@ app.post('/lost-items', async (req, res) => {
     const { itemName, category, description, lastSeenLocation, dateLost, reportedBy } = req.body;
 
     // Validate the student ID
-    if (!isValidObjectId(reportedBy)) {
-      throw new Error('Invalid student selected.');
+    if (!reportedBy || !isValidObjectId(reportedBy)) {
+      throw new Error('Please select a valid registered student.');
     }
 
     // Check that the student exists
@@ -316,8 +321,8 @@ app.post('/found-items', async (req, res) => {
     const { itemName, category, description, foundLocation, dateFound, reportedBy } = req.body;
 
     // Validate the student ID
-    if (!isValidObjectId(reportedBy)) {
-      throw new Error('Invalid student selected.');
+    if (!reportedBy || !isValidObjectId(reportedBy)) {
+      throw new Error('Please select a valid registered student.');
     }
 
     // Check that the student exists
@@ -424,7 +429,9 @@ mongoose
     });
   })
   .catch((err) => {
-    console.error('Failed to connect to MongoDB Atlas:', err.message);
+    // Redact connection credentials if present in the error message for safety
+    const safeMsg = (err.message || '').replace(/mongodb(\+srv)?:\/\/[^@]+@/g, 'mongodb+srv://<credentials-hidden>@');
+    console.error('Failed to connect to MongoDB Atlas:', safeMsg);
     console.error('Please check your MONGODB_URL in the .env file.');
     process.exit(1);
   });

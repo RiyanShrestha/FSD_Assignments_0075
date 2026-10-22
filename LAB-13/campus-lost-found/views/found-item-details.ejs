@@ -23,7 +23,7 @@
     <div class="detail-container">
       <a href="/found-items" class="back-link">&larr; Back to Found Items</a>
       <h1><%= item.itemName %></h1>
-      <span class="status status-<%= item.status.toLowerCase() %>"><%= item.status %></span>
+      <span class="status status-<%= (item.status || 'unclaimed').toLowerCase() %>"><%= item.status || 'Unclaimed' %></span>
 
       <div class="detail-card">
         <div class="detail-row">
@@ -40,12 +40,12 @@
         </div>
         <div class="detail-row">
           <span class="label">Date Found:</span>
-          <span><%= item.dateFound.toLocaleDateString() %></span>
+          <span><%= item.dateFound ? new Date(item.dateFound).toLocaleDateString() : 'N/A' %></span>
         </div>
         <div class="detail-row">
           <span class="label">Reported By:</span>
           <span>
-            <% if (item.reportedBy) { %>
+            <% if (item.reportedBy && item.reportedBy.fullName) { %>
               <a href="/students/<%= item.reportedBy._id %>"><%= item.reportedBy.fullName %></a>
               (<%= item.reportedBy.email %>)
             <% } else { %>
@@ -55,7 +55,7 @@
         </div>
         <div class="detail-row">
           <span class="label">Reported On:</span>
-          <span><%= item.createdAt.toLocaleDateString() %></span>
+          <span><%= item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'N/A' %></span>
         </div>
       </div>
     </div>

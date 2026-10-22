@@ -80,7 +80,7 @@
               <option value="">Select Student</option>
               <% students.forEach(function(student) { %>
                 <option value="<%= student._id %>" 
-                        <%= typeof reportedBy !== 'undefined' && reportedBy === student._id.toString() ? 'selected' : '' %>>
+                        <%= typeof reportedBy !== 'undefined' && reportedBy && reportedBy.toString() === student._id.toString() ? 'selected' : '' %>>
                   <%= student.fullName %> (<%= student.email %>)
                 </option>
               <% }); %>
