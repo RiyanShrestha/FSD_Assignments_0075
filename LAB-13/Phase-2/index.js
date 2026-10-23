@@ -196,50 +196,62 @@ app.get('/', async (req, res) => {
 
 // GET /login - Show student login page
 app.get('/login', async (req, res) => {
-  try {
-    const students = await Student.find().sort({ fullName: 1 });
-    const redirect = req.query.redirect || '';
-    const error = req.query.error || null;
-    const success = req.query.success || null;
-
-    res.render('login', { students, redirect, error, success });
-  } catch (err) {
-    console.error('Login page error:', err.message);
-    res.status(500).render('error', { message: 'Failed to load login page.' });
+  // If already authenticated, redirect home
+  if (req.currentStudent) {
+    return res.redirect('/');
   }
+  const redirect = req.query.redirect || '';
+  const error = req.query.error || null;
+  const success = req.query.success || null;
+  res.render('login', { redirect, error, success });
 });
 
-// POST /login - Authenticate student session
+// POST /login - Authenticate student session using email + password
 app.post('/login', async (req, res) => {
   const isJson = wantsJson(req);
 
   try {
-    const { studentId, email, redirect } = req.body;
-    let student = null;
+    const { email, password, redirect } = req.body;
 
-    if (studentId && isValidObjectId(studentId)) {
-      student = await Student.findById(studentId);
-    } else if (email && email.trim()) {
-      student = await Student.findOne({ email: email.trim().toLowerCase() });
+    // Reject any attempt to log in without both fields
+    if (!email || !email.trim()) {
+      const msg = 'Email address is required.';
+      if (isJson) return res.status(400).json({ error: msg });
+      return res.status(400).render('login', { redirect: redirect || '', error: msg, success: null });
+    }
+    if (!password) {
+      const msg = 'Password is required.';
+      if (isJson) return res.status(400).json({ error: msg });
+      return res.status(400).render('login', { redirect: redirect || '', error: msg, success: null });
     }
 
-    if (!student) {
-      const msg = 'Student account not found. Please register first.';
-      if (isJson) return res.status(400).json({ error: msg });
-      const students = await Student.find().sort({ fullName: 1 });
-      return res.status(400).render('login', { students, redirect: redirect || '', error: msg, success: null });
+    // Look up by email only (never by a browser-supplied ID)
+    const student = await Student.findOne({ email: email.trim().toLowerCase() });
+
+    // Use a constant-time "false" verification when no student found to
+    // prevent timing-based email enumeration attacks.
+    const passwordOk = student
+      ? Student.verifyPassword(password, student.passwordHash)
+      : (Student.verifyPassword(password, 'dummy:' + 'a'.repeat(128)), false);
+
+    if (!student || !passwordOk) {
+      const msg = 'Invalid email or password.';
+      if (isJson) return res.status(401).json({ error: msg });
+      return res.status(401).render('login', { redirect: redirect || '', error: msg, success: null });
     }
 
     // Set verified identity into session
     req.session.studentId = student._id.toString();
 
-    // Ensure session cookie is sent with latest signed ID
+    // Refresh signed cookie on login
     const signed = signSessionId(req.sessionId, SESSION_SECRET);
     res.setHeader('Set-Cookie', `clf_session=${signed}; Path=/; HttpOnly; SameSite=Lax`);
 
     const msg = `Logged in as ${student.fullName}`;
     if (isJson) {
-      return res.status(200).json({ success: true, message: msg, student });
+      // Never return passwordHash in JSON responses
+      const safe = { _id: student._id, fullName: student.fullName, email: student.email, department: student.department, contactNumber: student.contactNumber };
+      return res.status(200).json({ success: true, message: msg, student: safe });
     }
 
     const destination = redirect && redirect.startsWith('/') ? redirect : `/?success=${encodeURIComponent(msg)}`;
@@ -289,10 +301,28 @@ app.get('/students', async (req, res) => {
 // POST /students - Create a new student
 app.post('/students', async (req, res) => {
   try {
-    const { fullName, email, department, contactNumber } = req.body;
+    const { fullName, email, department, contactNumber, password, confirmPassword } = req.body;
+
+    // Validate password before hitting Mongoose
+    if (!password || password.length < 6) {
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(400).render('student-form', {
+        error: 'Password must be at least 6 characters.',
+        fullName, email, department, contactNumber
+      });
+    }
+    if (password !== confirmPassword) {
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(400).render('student-form', {
+        error: 'Passwords do not match.',
+        fullName, email, department, contactNumber
+      });
+    }
+
+    const passwordHash = Student.hashPassword(password);
 
     // Create and save student (Mongoose validates required fields & email format)
-    const student = new Student({ fullName, email, department, contactNumber });
+    const student = new Student({ fullName, email, department, contactNumber, passwordHash });
     await student.save();
 
     // Auto-login newly registered student
@@ -421,17 +451,27 @@ app.get('/lost-items', async (req, res) => {
 // POST /lost-items - Create a new lost item report
 app.post('/lost-items', async (req, res) => {
   try {
-    const { itemName, category, description, lastSeenLocation, dateLost, reportedBy } = req.body;
+    const { itemName, category, description, lastSeenLocation, dateLost } = req.body;
 
-    // Validate the student ID
-    if (!reportedBy || !isValidObjectId(reportedBy)) {
-      throw new Error('Please select a valid registered student.');
+    // reportedBy MUST come from the verified session – never from the browser body
+    const reportedBy = req.session && req.session.studentId;
+    if (!reportedBy) {
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(401).render('lost-item-form', {
+        error: 'You must be logged in to report a lost item.',
+        students, itemName, categoryVal: category, description, lastSeenLocation, dateLost
+      });
     }
 
-    // Check that the student exists
+    // Check that the session student still exists
     const studentExists = await Student.findById(reportedBy);
     if (!studentExists) {
-      throw new Error('Selected student does not exist. Please register them first.');
+      req.session.studentId = null;
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(401).render('lost-item-form', {
+        error: 'Your session is invalid. Please log in again.',
+        students, itemName, categoryVal: category, description, lastSeenLocation, dateLost
+      });
     }
 
     // Create and save the lost item
@@ -468,8 +508,7 @@ app.post('/lost-items', async (req, res) => {
       categoryVal: req.body.category,
       description: req.body.description,
       lastSeenLocation: req.body.lastSeenLocation,
-      dateLost: req.body.dateLost,
-      reportedBy: req.body.reportedBy
+      dateLost: req.body.dateLost
     });
   }
 });
@@ -556,17 +595,27 @@ app.get('/found-items', async (req, res) => {
 // POST /found-items - Create a new found item report
 app.post('/found-items', async (req, res) => {
   try {
-    const { itemName, category, description, foundLocation, dateFound, reportedBy } = req.body;
+    const { itemName, category, description, foundLocation, dateFound } = req.body;
 
-    // Validate the student ID
-    if (!reportedBy || !isValidObjectId(reportedBy)) {
-      throw new Error('Please select a valid registered student.');
+    // reportedBy MUST come from the verified session – never from the browser body
+    const reportedBy = req.session && req.session.studentId;
+    if (!reportedBy) {
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(401).render('found-item-form', {
+        error: 'You must be logged in to report a found item.',
+        students, itemName, categoryVal: category, description, foundLocation, dateFound
+      });
     }
 
-    // Check that the student exists
+    // Check that the session student still exists
     const studentExists = await Student.findById(reportedBy);
     if (!studentExists) {
-      throw new Error('Selected student does not exist. Please register them first.');
+      req.session.studentId = null;
+      const students = await Student.find().sort({ fullName: 1 });
+      return res.status(401).render('found-item-form', {
+        error: 'Your session is invalid. Please log in again.',
+        students, itemName, categoryVal: category, description, foundLocation, dateFound
+      });
     }
 
     // Create and save the found item
@@ -603,8 +652,7 @@ app.post('/found-items', async (req, res) => {
       categoryVal: req.body.category,
       description: req.body.description,
       foundLocation: req.body.foundLocation,
-      dateFound: req.body.dateFound,
-      reportedBy: req.body.reportedBy
+      dateFound: req.body.dateFound
     });
   }
 });
@@ -673,13 +721,13 @@ app.post('/found-items/:id/claims', async (req, res) => {
       return res.redirect(`/found-items/${id}?error=${encodeURIComponent(msg)}`);
     }
 
-    // 4. Determine claimant identity (verified session first, fallback to form/api claimedBy)
-    const claimantId = req.session && req.session.studentId ? req.session.studentId : req.body.claimedBy;
+    // 4. claimedBy MUST come from the verified session — never from browser-submitted IDs
+    const claimantId = req.session && req.session.studentId;
 
-    if (!claimantId || !isValidObjectId(claimantId)) {
-      const msg = 'A valid registered student must be selected to submit a claim.';
-      if (isJson) return res.status(400).json({ error: msg });
-      return res.redirect(`/found-items/${id}?error=${encodeURIComponent(msg)}`);
+    if (!claimantId) {
+      const msg = 'You must be logged in to submit a claim.';
+      if (isJson) return res.status(401).json({ error: msg });
+      return res.redirect(`/login?redirect=${encodeURIComponent('/found-items/' + id)}&error=${encodeURIComponent(msg)}`);
     }
 
     // 5. Check student existence
@@ -721,11 +769,6 @@ app.post('/found-items/:id/claims', async (req, res) => {
       status: 'Pending'
     });
     await claim.save();
-
-    // Auto-login claimant session if not already logged in
-    if (!req.session.studentId) {
-      req.session.studentId = claimantId.toString();
-    }
 
     const successMsg = 'Claim submitted successfully!';
     if (isJson) {
@@ -948,20 +991,23 @@ app.use((err, req, res, next) => {
 // ============================================================
 // Connect to MongoDB and Start Server
 // ============================================================
+
 const MONGODB_URL = process.env.MONGODB_URL;
+const MONGODB_DB = process.env.MONGODB_DB || 'campus_admin';
 
 if (!MONGODB_URL) {
-  console.error('ERROR: MONGODB_URL is not defined in your .env file.');
-  console.error('Create a .env file with: MONGODB_URL=your_mongodb_atlas_connection_string');
+  console.error('ERROR: MONGODB_URL is missing from your .env file.');
   process.exit(1);
 }
 
 mongoose
-  .connect(MONGODB_URL)
+  .connect(MONGODB_URL, {
+    dbName: MONGODB_DB
+  })
   .then(async () => {
-    console.log('Connected to MongoDB Atlas successfully!');
+    console.log(`Connected to MongoDB Atlas successfully!`);
+    console.log(`Database: ${mongoose.connection.name}`);
 
-    // Ensure compound unique indexes are built
     try {
       await Claim.init();
     } catch (indexErr) {
@@ -973,9 +1019,11 @@ mongoose
     });
   })
   .catch((err) => {
-    // Redact connection credentials if present in the error message for safety
-    const safeMsg = (err.message || '').replace(/mongodb(\+srv)?:\/\/[^@]+@/g, 'mongodb+srv://<credentials-hidden>@');
+    const safeMsg = (err.message || '').replace(
+      /mongodb(\+srv)?:\/\/[^@]+@/g,
+      'mongodb+srv://<credentials-hidden>@'
+    );
+
     console.error('Failed to connect to MongoDB Atlas:', safeMsg);
-    console.error('Please check your MONGODB_URL in the .env file.');
     process.exit(1);
   });

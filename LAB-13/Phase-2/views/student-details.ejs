@@ -42,12 +42,6 @@
         <% const isCurrentSession = (typeof currentStudent !== 'undefined' && currentStudent && currentStudent._id.toString() === student._id.toString()); %>
         <% if (isCurrentSession) { %>
           <span class="status status-approved" style="font-size: 0.9rem;">✓ Currently Logged In</span>
-        <% } else { %>
-          <form action="/login" method="POST" style="margin: 0;">
-            <input type="hidden" name="studentId" value="<%= student._id %>">
-            <input type="hidden" name="redirect" value="/students/<%= student._id %>">
-            <button type="submit" class="btn btn-secondary">🔑 Log In as this Student</button>
-          </form>
         <% } %>
       </div>
 
