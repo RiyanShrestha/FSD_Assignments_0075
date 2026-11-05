@@ -1,0 +1,11 @@
+import { useEffect, useState } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { MapPin, ArrowUpRight } from 'lucide-react';
+import { api } from '../services/api.js';
+import { EventGrid, LoadingSpinner, ErrorMessage, SearchBar } from '../components/UI.jsx';
+export default function Explore(){
+ const [params,setParams]=useSearchParams();const [events,setEvents]=useState([]),[loading,setLoading]=useState(true),[error,setError]=useState('');const search=params.get('search')||'',category=params.get('category')||'All',location=params.get('location')||'';
+ useEffect(()=>{let active=true;setLoading(true);api.events({search,category:category==='All'?'':category,location}).then(r=>active&&setEvents(r.data)).catch(e=>active&&setError(e.message)).finally(()=>active&&setLoading(false));return()=>{active=false};},[search,category,location]);
+ const update=(key,value)=>{const next=new URLSearchParams(params);if(value)next.set(key,value);else next.delete(key);setParams(next);};
+ return <div className="page-shell"><div className="page-intro"><div className="breadcrumbs"><Link to="/">Home</Link><span>/</span> Explore</div><span className="eyebrow">YOUR NEXT YES IS HERE</span><h1>Make a plan<span className="accent">.</span></h1><p>Find the gigs, gatherings and good times happening near you.</p><div className="explore-stats"><span><b>{events.length.toString().padStart(2,'0')}</b> events to explore</span><span>Updated as new plans land <span className="live-dot"/></span></div></div><div className="filter-panel"><SearchBar value={search} onChange={v=>update('search',v)} placeholder="Search events by name…"/><label className="select-filter"><span>Category</span><select value={category} onChange={e=>update('category',e.target.value)}>{['All','Music','Technology','Food','Arts','Wellness','Community'].map(c=><option key={c}>{c}</option>)}</select></label><label className="location-filter"><MapPin size={16}/><input value={location} onChange={e=>update('location',e.target.value)} placeholder="Any location"/></label></div><div className="results-label"><span>SHOWING <b>{events.length}</b> EVENTS</span><span>Sorted by soonest <span>↕</span></span></div>{loading?<LoadingSpinner/>:error?<ErrorMessage message={error} onRetry={()=>setParams(new URLSearchParams(params))}/>:<EventGrid events={events}/>}</div>;
+}

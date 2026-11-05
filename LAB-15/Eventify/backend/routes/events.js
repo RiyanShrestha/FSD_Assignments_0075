@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { listEvents, getEvent, createEvent, updateEvent, deleteEvent } from '../controllers/events.js';
+import { validateEvent } from '../middleware/validate.js';
+const router = Router();
+router.get('/', listEvents);
+router.get('/:id', getEvent);
+router.post('/', validateEvent, createEvent);
+router.put('/:id', validateEvent, updateEvent);
+router.delete('/:id', deleteEvent);
+export default router;

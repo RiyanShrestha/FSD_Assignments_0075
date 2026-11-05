@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { listBookings, getBooking, createBooking, updateBooking, cancelBooking } from '../controllers/bookings.js';
+import { validateBooking } from '../middleware/validate.js';
+const router = Router();
+router.get('/', listBookings);
+router.get('/:id', getBooking);
+router.post('/', validateBooking, createBooking);
+router.put('/:id', updateBooking);
+router.delete('/:id', cancelBooking);
+export default router;
