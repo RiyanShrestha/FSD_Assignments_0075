@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3000
+@token = paste-your-jwt-token-here
+
+### Register a student account
+POST {{baseUrl}}/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Sam Student",
+  "email": "sam@example.com",
+  "password": "strong-password-123"
+}
+
+### Log in (copy the returned token into @token above)
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "sam@example.com",
+  "password": "strong-password-123"
+}
+
+### Get the authenticated user's profile
+# Paste the JWT returned by register/login into @token at the top of this file.
+GET {{baseUrl}}/api/users/profile
+Authorization: Bearer {{token}}
+
+### Get the admin dashboard
+# Use a JWT for an account with the admin role. Create the sample admin with: node createAdmin.js
+GET {{baseUrl}}/api/users/admin
+Authorization: Bearer {{token}}
